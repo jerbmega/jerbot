@@ -1,2 +1,5 @@
 venv
 .idea
+config.yaml
+config
+jerbot-neo.log
