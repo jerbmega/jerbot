@@ -11,3 +11,4 @@ Everything!
 * Initial skeleton framework, including cleaned up versions of the jerbot2 utilities.
 * The ability  to define multiple API tokens in the main configuration, and easily switch between them using environment vars.
 * Proper error handling and permission management.
+* Announcement system that sends a message in the moderation log channel of every server Jerbot is deployed in. Will be used for major downtime or update announcements.
