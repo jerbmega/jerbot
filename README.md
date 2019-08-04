@@ -7,6 +7,7 @@ It is missing most functionality of jerbot2 at the moment. Most of jerbot2's fea
 ## Implemented features
 * Configuration and cog loading
 * Logging module
+* Blacklist module
 
 
 ## Planned new features
