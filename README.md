@@ -6,11 +6,10 @@ It is missing most functionality of jerbot2 at the moment. Most of jerbot2's fea
 
 ## Implemented features
 * Configuration and cog loading
-* Logging module
-* Blacklist module
+* Logging, blacklist, auto-message
 
 
 ## Planned new features
 * The ability  to define multiple API tokens in the main configuration, and easily switch between them using environment vars.
-* Proper error handling and permission management.
+* Proper error handling.
 * Announcement system that sends a message in the moderation log channel of every server Jerbot is deployed in. Will be used for major downtime or update announcements.

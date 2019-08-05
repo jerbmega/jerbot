@@ -78,3 +78,12 @@ async def write_embed(channel: channel, member: member, color, title, event, ava
     if footer:
         embed.set_footer(text=footer)
     await bot.get_channel(channel).send(message, embed=embed)
+
+
+def check_perms(command):
+    def predicate(ctx):
+        for role in ctx.message.author.roles:
+            if role.name.lower() in {i.lower() for i in config[str(ctx.message.guild.id)][command]['roles']}:
+                return True
+        return False
+    return commands.check(predicate)
