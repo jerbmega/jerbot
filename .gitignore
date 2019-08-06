@@ -3,3 +3,4 @@ venv
 config.yaml
 config
 jerbot-neo.log
+jerbot-neo.db

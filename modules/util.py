@@ -2,7 +2,9 @@ import os
 import re
 import yaml
 
-from discord import Embed, channel, member
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from datetime import timedelta
+from discord import Embed, channel, member, message
 from discord.ext import commands
 
 bot = commands.Bot(command_prefix="!")
@@ -79,6 +81,12 @@ async def write_embed(channel: channel, member: member, color, title, event, ava
         embed.set_footer(text=footer)
     await bot.get_channel(channel).send(message, embed=embed)
 
+async def write_message(channel: channel, message: message):
+    """
+    :param channel: ID of the channel to send a message in.
+    :param message: Message to send.
+    """
+    await bot.get_channel(channel).send(message)
 
 def check_perms(command):
     def predicate(ctx):
@@ -87,3 +95,29 @@ def check_perms(command):
                 return True
         return False
     return commands.check(predicate)
+
+async def parse_tr(parsestring: str, check_ids=True, check_time=True, check_reason=True):
+    """
+    Takes an input String and parses it into several user ID's, a time, and a separate reason string.
+    :param parsestring: Input string
+    :return: {ids: list, time: int, reason: str}
+    """
+    ids = []
+    time = None
+    reason = []
+
+    def parsetime(time):
+        case = dict(d=timedelta(days=int(re.sub(r'\D', '', time))), h=timedelta(hours=int(re.sub(r'\D', '', time))),
+                    m=timedelta(minutes=int(re.sub(r'\D', '', time))),
+                    s=timedelta(seconds=int(re.sub(r'\D', '', time))))
+        return case.get(time[-1])
+    for parse in parsestring.split(' '):
+        if check_ids and re.sub(r'\D', '', parse) and bot.get_user(int(parse)):
+            ids.append(parse)
+        elif check_time and not time and parse.endswith(('d', 'h', 'm', 's')):
+            time = parsetime(parse)
+        elif check_reason:
+            reason.append(parse)
+
+    return dict(ids=ids if check_ids else None, time=time if check_time else None,
+                reason=' '.join(reason) if check_reason else None)
