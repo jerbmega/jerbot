@@ -1,18 +1,9 @@
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord import channel, message
-from modules.util import bot, config
+from modules.util import bot, config, write_message
 import re
 
 scheduler = AsyncIOScheduler()
-
-
-async def write_message(channel: channel, message: message):
-    """
-    :param channel: ID of the channel to send a message in.
-    :param message: Message to send.
-    """
-    await bot.get_channel(channel).send(message)
-
 
 def setup(bot):
     for server in config:
