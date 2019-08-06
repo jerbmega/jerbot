@@ -65,5 +65,6 @@ class ModLog(commands.Cog):
                           f'{message.author.name}#{message.author.discriminator}', 'Message edited.', fields=fields)
 
 
+
 def setup(bot):
     bot.add_cog(ModLog(bot))
