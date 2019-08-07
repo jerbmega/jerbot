@@ -96,28 +96,13 @@ def check_perms(command):
         return False
     return commands.check(predicate)
 
-async def parse_tr(parsestring: str, check_ids=True, check_time=True, check_reason=True):
+async def parse_time(time: str):
     """
-    Takes an input String and parses it into several user ID's, a time, and a separate reason string.
+    Takes an input String and parses it into a usable timedelta.
     :param parsestring: Input string
-    :return: {ids: list, time: int, reason: str}
+    :return: timedelta
     """
-    ids = []
-    time = None
-    reason = []
-
-    def parsetime(time):
-        case = dict(d=timedelta(days=int(re.sub(r'\D', '', time))), h=timedelta(hours=int(re.sub(r'\D', '', time))),
-                    m=timedelta(minutes=int(re.sub(r'\D', '', time))),
-                    s=timedelta(seconds=int(re.sub(r'\D', '', time))))
-        return case.get(time[-1])
-    for parse in parsestring.split(' '):
-        if check_ids and re.sub(r'\D', '', parse) and bot.get_user(int(parse)):
-            ids.append(parse)
-        elif check_time and not time and parse.endswith(('d', 'h', 'm', 's')):
-            time = parsetime(parse)
-        elif check_reason:
-            reason.append(parse)
-
-    return dict(ids=ids if check_ids else None, time=time if check_time else None,
-                reason=' '.join(reason) if check_reason else None)
+    case = dict(d=timedelta(days=int(re.sub(r'\D', '', time))), h=timedelta(hours=int(re.sub(r'\D', '', time))),
+                m=timedelta(minutes=int(re.sub(r'\D', '', time))),
+                s=timedelta(seconds=int(re.sub(r'\D', '', time))))
+    return case.get(time[-1])
