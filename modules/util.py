@@ -1,8 +1,6 @@
 import os
 import re
 import yaml
-
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from datetime import timedelta
 from discord import Embed, channel, member, message
 from discord.ext import commands
@@ -55,22 +53,23 @@ def load_modules():
     return successful
 
 
-async def write_embed(channel: channel, member: member, color, title, event, avatar=True, footer=None, fields=None,
-                      message=None):
+async def write_embed(channel: channel, member: member, color, title, event='', avatar=True, footer=None, fields=None,
+                      message=None, description=None):
     """
     :param channel: ID of the channel to send the log embed in.
     :param member: Member that is being referenced in this embed.
     :param color: Color of the embed.
     :param title: Title of the embed.
-    :param event: Event that is triggering the embed write: Member Joined, Member Left, Member Banned, etc.
+    :param event: Event that is triggering the embed write: Member Joined, Member Left, Member Banned, etc. Optional.
     :param avatar: If avatar should be displayed in moderation logs. Default: True
     :param fields: Optional. [[title, content]]
     :param footer: Optional. Footer for the embed.
     :param message: Optional. Message string to send alongside the embed.
+    :param message: Optional. Description of the embed.
     """
     if fields is None:
         fields = []
-    embed = Embed(color=color, title=title)
+    embed = Embed(color=color, title=title, description=description)
     embed.set_author(name=event)
     if avatar:
         embed.set_thumbnail(url=member.avatar_url if member.avatar_url else member.default_avatar_url)
@@ -88,13 +87,28 @@ async def write_message(channel: channel, message: message):
     """
     await bot.get_channel(channel).send(message)
 
-def check_perms(command):
-    def predicate(ctx):
-        for role in ctx.message.author.roles:
-            if role.name.lower() in {i.lower() for i in config[str(ctx.message.guild.id)][command]['roles']}:
-                return True
-        return False
-    return commands.check(predicate)
+
+async def check_roles(command: str, ctx):
+    """
+    Custom check. Checks if a the user has a role for the command in the config.
+    :param command: Category in the YAML to look under
+    :param ctx: discord.py context
+    :return: boolean
+    """
+    for role in ctx.message.author.roles:
+        if role.name.lower() in {i.lower() for i in config[str(ctx.guild.id)][command]['roles']}:
+            return True
+    return False
+
+
+async def module_enabled(command: str, id: int or str):
+    """
+    Custom check. Checks if the module is enabled for the server in the config.
+    :param command: Category in the YAML to look under
+    :param id: server ID
+    :return: boolean
+    """
+    return config[str(id)][command]['enabled']
 
 async def parse_time(time: str):
     """
