@@ -13,7 +13,7 @@ class EagleEye(commands.Cog):
         return await check_roles('eagleeye', ctx) and await module_enabled('eagleeye', ctx.guild.id)
 
     @commands.command()
-    async def watch_neo(self, ctx, users: commands.Greedy[discord.Member], *, reason: typing.Optional[str] = ''):
+    async def watch(self, ctx, users: commands.Greedy[discord.Member], *, reason: typing.Optional[str] = ''):
         """
         Adds problematic users to the watchlist.
         """
@@ -23,7 +23,7 @@ class EagleEye(commands.Cog):
         await ctx.send(f'{list_prettyprint(user.name for user in users)} added to the watchlist.')
 
     @commands.command()
-    async def unwatch_neo(self, ctx, users: commands.Greedy[discord.Member]):
+    async def unwatch(self, ctx, users: commands.Greedy[discord.Member]):
         """
         Removes users from the watchlist.
         """
