@@ -12,6 +12,7 @@ The immediate focus is to lay the groundwork for the rest of the modules. Some s
 * (NEW, EXPERIMENTAL) SQLite3 database
 * (NEW) Proper moderation command parsing
 * (NEW) Announcement system
+* (NEW) Global task scheduling
 
 ## Planned new features
 * The ability  to define multiple API tokens in the main configuration, and easily switch between them using environment vars.
