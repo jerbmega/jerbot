@@ -1,12 +1,15 @@
 import os
 import re
 import yaml
-from datetime import timedelta
+from datetime import datetime, timedelta
 from discord import Embed, channel, member, message
 from discord.ext import commands
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 bot = commands.Bot(command_prefix="!")
 config = {}
+scheduler = AsyncIOScheduler()
+scheduler.start()
 # TODO aliases were never fully implemented in jerbot2, figure this out
 
 
@@ -120,3 +123,22 @@ async def parse_time(time: str):
                 m=timedelta(minutes=int(re.sub(r'\D', '', time))),
                 s=timedelta(seconds=int(re.sub(r'\D', '', time))))
     return case.get(time[-1])
+
+
+async def schedule_task(task, time: timedelta, id: str, args: list = None):
+    '''
+    Schedules a task to be ran at the provided time delta.
+    :param task: Task to be ran
+    :param time: Timedelta
+    :param id: ID for the task. This will be needed to remove the task later.
+    :param args: Arguments to pass to the task. Optional.
+    '''
+    scheduler.add_job(task, 'date', run_date=datetime.now() + time, args=args, id=id)
+
+
+async def remove_task(id):
+    '''
+        Removes a task from the queue.
+        :param id: ID of the task to be deleted,
+    '''
+    scheduler.remove_job(id)
