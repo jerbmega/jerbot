@@ -74,7 +74,7 @@ class EagleEye(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message_edit(self, old_message, message):
-        if not await module_enabled('eagleeye', message.guild.id): return
+        if not await module_enabled('eagleeye', message.guild.id) or old_message.content == message.content: return
         if message.author.id in db.query(f'SELECT DISTINCT id from eagleeye_{message.guild.id}'):
             server = config[str(message.guild.id)]
             fields = [['Old message', old_message.content], ['New message', message.content]]
