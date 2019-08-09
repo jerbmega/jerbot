@@ -16,8 +16,10 @@ class ModUtil(commands.Cog):
                 try:
                     await write_message(config[server]['modlog_id'], f'**IMPORTANT:** {announcement}')
                 except AttributeError:
-                    await ctx.send(f'**CONFIGURATION ERROR**: {self.bot.get_guild(server).name} does not have a valid mod channel.' )
+                    await ctx.send('**CONFIGURATION ERROR**: '
+                                   f'{self.bot.get_guild(server).name} does not have a valid mod channel.' )
 
+    
 
 def setup(bot):
     bot.add_cog(ModUtil(bot))

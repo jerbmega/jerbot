@@ -42,6 +42,7 @@ def remove(table:str, exp: str):
 def query(query: str):
     """
     Queries from the database.
+    Dangerous. DO NOT EXPOSE to a user command.
     :param query: String containing the query for the database.
     :return: fetchall() from query
     """
