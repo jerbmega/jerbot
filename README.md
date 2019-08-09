@@ -8,7 +8,7 @@ It is missing most functionality of jerbot2 at the moment. Most of jerbot2's fea
 The immediate focus is to lay the groundwork for the rest of the modules. Some simple modules are being tackled, but many will rely on new features in order to be implemented in a cleaner manner, so these are being done first.
 
 * Configuration and cog loading
-* Logging, blacklist, auto-message
+* Logging, blacklist, auto-message, eagleeye
 * (NEW, EXPERIMENTAL) SQLite3 database
 * (NEW) Proper moderation command parsing
 * (NEW) Announcement system
