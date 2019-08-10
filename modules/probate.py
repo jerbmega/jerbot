@@ -18,7 +18,7 @@ class Probation(commands.Cog):
                                                   name=config[str(ctx.guild.id)]['probate']['role_name']))
 
     @commands.command()
-    async def probate_neo(self, ctx, users: commands.Greedy[discord.Member], time: str = "24h", *, reason=""):
+    async def probate(self, ctx, users: commands.Greedy[discord.Member], time: str = "24h", *, reason=""):
         """
         Locks users behind a probation role. This role will automatically be re-added if the user attempts to leave.
         Upon leaving, probation time will reset, and the user will be notified of such.
@@ -37,7 +37,7 @@ class Probation(commands.Cog):
         await ctx.send(f'{list_prettyprint(user.name for user in users)} banished to the Shadow Realm.')
 
     @commands.command()
-    async def unprobate_neo(self, ctx, users: commands.Greedy[discord.Member]):
+    async def unprobate(self, ctx, users: commands.Greedy[discord.Member]):
         """
         Immediately removes a user from probation, canceling the scheduled job.
         """
