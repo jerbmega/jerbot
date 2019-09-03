@@ -1,11 +1,8 @@
 from discord.ext import commands
 import requests
 from bs4 import BeautifulSoup
-import aiohttp
 import modules.db as db
 import discord.member
-import typing
-from modules.util import config, check_roles, list_prettyprint, module_enabled, write_embed
 
 
 class WikiParse(commands.Cog):
