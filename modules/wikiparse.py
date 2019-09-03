@@ -14,7 +14,7 @@ class WikiParse(commands.Cog):
         return ctx.guild.id == 123641386921754625
 
     @commands.command()
-    async def wiki_neo(self, ctx, *, parse: str):
+    async def wiki(self, ctx, *, parse: str):
         """
         Fetches a result from the Antibirth, Revelations or Isaac Gamepedia. Only works in the Isaac server.
         Syntax: wiki (wiki = [anti/antibirth, rev/revelations], optional) [query]
@@ -32,7 +32,7 @@ class WikiParse(commands.Cog):
 
 
     @commands.command()
-    async def platgod_neo(self, ctx, *, parse: str):
+    async def platgod(self, ctx, *, parse: str):
         """
         Fetches a result from Platinum God. Only works in the Isaac server.
         Syntax: platgod (page = [wotl/vanilla, rb/rebirth, ab/afterbirth, anti/antibirth], optional) [query]
