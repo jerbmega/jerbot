@@ -28,7 +28,7 @@ class Probation(commands.Cog):
         for user in users:
             await schedule_task(self.remove_probate, timedelta, f'probation_{ctx.guild.id}_{user.id}',
                                 [ctx, user, ctx.guild.id])
-            db.insert(f'probations_{ctx.guild.id}', (int(user.id), reason, time))
+            db.insert(f'probations_{ctx.guild.id}', (user.id, reason, time))
             await user.add_roles(discord.utils.get(ctx.guild.roles,
                                                    name=config[str(ctx.guild.id)]['probate']['role_name']))
 
@@ -46,10 +46,8 @@ class Probation(commands.Cog):
                 await remove_task(f'probation_{ctx.guild.id}_{user.id}')
             except JobLookupError:
                 pass #TODO proper error handling
-            for user in users:
-                db.remove(f'probations_{ctx.guild.id}', f'id = {user.id}')
-                await user.remove_roles(discord.utils.get(ctx.guild.roles,
-                                                          name=config[str(ctx.guild.id)]['probate']['role_name']))
+            await user.remove_roles(discord.utils.get(ctx.guild.roles,
+                                                      name=config[str(ctx.guild.id)]['probate']['role_name']))
             db.remove(f'probations_{ctx.guild.id}', f'id = {user.id}')
         await ctx.send(f'{list_prettyprint(user.name for user in users)} released from the Shadow Realm.')
 

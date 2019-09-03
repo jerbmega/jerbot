@@ -91,8 +91,7 @@ class ModUtil(commands.Cog):
                 try:
                     await write_message(config[server]['modlog_id'], f'**IMPORTANT:** {announcement}')
                 except AttributeError:
-                    await ctx.send('**CONFIGURATION ERROR**: '
-                                   f'{self.bot.get_guild(server).name} does not have a valid mod channel.' )
+                    pass
 
     @commands.is_owner()
     @commands.command()

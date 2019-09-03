@@ -2,7 +2,6 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord import channel, message
 from modules.util import bot, config, write_message
 import re
-
 scheduler = AsyncIOScheduler()
 
 def setup(bot):

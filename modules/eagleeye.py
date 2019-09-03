@@ -10,7 +10,7 @@ class EagleEye(commands.Cog):
         self.bot = bot
 
     async def cog_check(self, ctx):
-        return await check_roles('eagleeye', ctx) and await module_enabled('eagleeye', ctx.guild.id)
+        return check_roles('eagleeye', ctx) and await module_enabled('eagleeye', ctx.guild.id)
 
     @commands.command()
     async def watch(self, ctx, users: commands.Greedy[discord.Member], *, reason: typing.Optional[str] = ''):
