@@ -5,6 +5,7 @@ conn = sqlite3.connect('jerbot-neo.db')
 conn.row_factory = lambda cursor, row: row[0]
 c = conn.cursor()
 
+
 def try_create_table(table: str, keys: tuple):
     """
     Creates a table if it does not exist.
@@ -14,6 +15,20 @@ def try_create_table(table: str, keys: tuple):
     """
     try:
         c.execute(f'CREATE TABLE {table} {keys}')
+        conn.commit()
+        return True
+    except sqlite3.OperationalError:
+        return False
+
+
+def drop_table(table: str):
+    """
+    Drops a table from the database.
+    :param table: String corresponding to a table in the SQLite database.
+    :return: True if table was successfully dropped.
+    """
+    try:
+        c.execute(f'DROP TABLE {table}')
         conn.commit()
         return True
     except sqlite3.OperationalError:
@@ -30,6 +45,7 @@ def insert(table: str, values: tuple):
     c.execute(f'INSERT INTO {table} VALUES {values}')
     conn.commit()
 
+
 def remove(table:str, exp: str):
     """
     Removes values from a table.
@@ -38,6 +54,7 @@ def remove(table:str, exp: str):
     """
     c.execute(f'DELETE FROM {table} WHERE {exp}')
     conn.commit()
+
 
 def query(query: str):
     """
