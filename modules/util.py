@@ -91,17 +91,24 @@ async def write_message(channel: channel, message: message):
     await bot.get_channel(channel).send(message)
 
 
-async def check_roles(command: str, ctx):
+def check_roles(command: str, ctx = None):
     """
     Custom check. Checks if a the user has a role for the command in the config.
     :param command: Category in the YAML to look under
     :param ctx: discord.py context
     :return: boolean
     """
-    for role in ctx.message.author.roles:
-        if role.name.lower() in {i.lower() for i in config[str(ctx.guild.id)][command]['roles']}:
-            return True
-    return False
+
+    def predicate(ctx):
+        for role in ctx.message.author.roles:
+            if role.name.lower() in {i.lower() for i in config[str(ctx.guild.id)][command]['roles']}:
+                return True
+        return False
+
+    if ctx:
+        return predicate(ctx)
+    else:
+        return commands.check(predicate)
 
 
 async def module_enabled(command: str, id: int or str):
