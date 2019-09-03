@@ -10,7 +10,7 @@ class ModUtil(commands.Cog):
 
     @commands.has_permissions(kick_members=True)
     @commands.command()
-    async def kick_neo(self, ctx, users: commands.Greedy[discord.Member], *, reason: str = None):
+    async def kick(self, ctx, users: commands.Greedy[discord.Member], *, reason: str = None):
         """
         Kicks users from the server.
         """
@@ -20,7 +20,7 @@ class ModUtil(commands.Cog):
 
     @commands.has_permissions(ban_members=True)
     @commands.command()
-    async def ban_neo(self, ctx, users: commands.Greedy[discord.User], *, reason: str = None):
+    async def ban(self, ctx, users: commands.Greedy[discord.User], *, reason: str = None):
         """
         Bans users from the server.
         """
@@ -31,7 +31,7 @@ class ModUtil(commands.Cog):
 
     @commands.has_permissions(ban_members=True)
     @commands.command()
-    async def unban_neo(self, ctx, users: commands.Greedy[discord.User], *, reason: str = None):
+    async def unban(self, ctx, users: commands.Greedy[discord.User], *, reason: str = None):
         """
         Unbans users from the server.
         """
@@ -41,7 +41,7 @@ class ModUtil(commands.Cog):
 
     @check_roles('pins')
     @commands.command()
-    async def pin_neo(self, ctx, ids: commands.Greedy[discord.TextChannel]):
+    async def pin(self, ctx, ids: commands.Greedy[discord.TextChannel]):
         """
         Pins a message in a channel.
         """
@@ -55,7 +55,7 @@ class ModUtil(commands.Cog):
 
     @check_roles('pins')
     @commands.command()
-    async def unpin_neo(self, ctx, ids: commands.Greedy[discord.TextChannel]):
+    async def unpin(self, ctx, ids: commands.Greedy[discord.TextChannel]):
         """
         Unpins a message in a channel.
         """
@@ -69,7 +69,7 @@ class ModUtil(commands.Cog):
 
     @check_roles('staff')
     @commands.command()
-    async def purge_neo(self, ctx, users: commands.Greedy[discord.Member], num: int):
+    async def purge(self, ctx, users: commands.Greedy[discord.Member], num: int):
         """
         Purges messages from the current channel.
         """
