@@ -19,6 +19,9 @@ class Meta(commands.Cog):
 
     @commands.command()
     async def insmod(self, ctx, *modules):
+        """
+        Adds a cog to the running instance of the bot. Owner only.
+        """
         for module in modules:
             if module in self.find_modules():
                 self.bot.load_extension('modules.' + module)
@@ -26,6 +29,10 @@ class Meta(commands.Cog):
 
     @commands.command()
     async def rmmod(self, ctx, *modules):
+        """
+        Removes a cog from the running instance of the bot. Owner only.
+        Certain cogs cannot be removed as they provide critical functionality.
+        """
         required_modules = ["meta"]
         for module in modules:
             if module in self.find_modules() and module not in required_modules:
@@ -34,6 +41,9 @@ class Meta(commands.Cog):
 
     @commands.command()
     async def reload(self, ctx, *modules):
+        """
+        Reloads a cog in the running instance of the bot. Owner only.
+        """
         for module in modules:
             if module in self.find_modules():
                 self.bot.unload_extension('modules.' + module)
