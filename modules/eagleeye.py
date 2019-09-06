@@ -65,7 +65,7 @@ class EagleEye(commands.Cog):
             for attachment in message.attachments:
                 fields.append(['Attachment', attachment.proxy_url])
 
-            await write_embed(server['modlog_id'], message.author, server['eagleeye']['embed_color'],
+            await write_embed(server['eagleeye']['channel'], message.author, server['eagleeye']['embed_color'],
                               f'{message.author.name} ({message.author.id})',
                               description=f'[#{message.channel.name}]'
                                           f'(https://discordapp.com/channels/{message.guild.id}/{message.channel.id}'
@@ -81,7 +81,7 @@ class EagleEye(commands.Cog):
             for attachment in message.attachments:
                 fields.append(['Attachment', attachment.proxy_url])
 
-            await write_embed(server['modlog_id'], message.author, server['eagleeye']['embed_color'],
+            await write_embed(server['eagleeye']['channel'], message.author, server['eagleeye']['embed_color'],
                               f'{message.author.name} ({message.author.id}) **edited a message.**',
                               description=f'[#{message.channel.name}](https://discordapp.com/channels/'
                                           f'{message.guild.id}/{message.channel.id}/{message.id})',
