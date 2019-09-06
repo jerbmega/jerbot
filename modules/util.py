@@ -41,7 +41,7 @@ def load_config():
                     config[server_id] = yaml.safe_load(cfg)
                     successful.append(server_id)
                 except Exception as e:
-                    print('Failed to load {name}. ({e})')
+                    print(f'Failed to load {name}. ({e})')
     return successful
 
 
