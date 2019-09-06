@@ -10,7 +10,7 @@ class Probation(commands.Cog):
         self.bot = bot
 
     async def cog_check(self, ctx):
-        return await check_roles('probate', ctx) and await module_enabled('probate', ctx.guild.id)
+        return check_roles('probate', ctx) and await module_enabled('probate', ctx.guild.id)
 
     async def remove_probate(self, ctx, user, id):
         db.remove(f'probations_{id}', f'id = {user.id}')
