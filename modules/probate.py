@@ -84,16 +84,13 @@ class Probation(commands.Cog):
             db.insert(f'probations_{member.guild.id}', (int(member.id), 'Automatic probate.', '0s'))
             await member.add_roles(discord.utils.get(member.guild.roles,
                                                    name=config[str(member.guild.id)]['probate']['role_name']))
-            await self.bot.get_channel(server['modlog_id']).send('Auto-probation enabled, probating {member.mention}.')
+            await self.bot.get_channel(server['modlog_id']).send(f'Auto-probation enabled, probating {member.mention}.')
 
     @commands.Cog.listener()
     async def on_member_leave(self, member):
         if module_enabled('probate', member.guild.id) and member.id in db.query(
                 f'SELECT DISTINCT id FROM probations_{member.guild.id}'):
-            try:
-                await remove_task(f'probation_{member.guild.id}_{member.id}')
-            except JobLookupError:
-                pass #TODO proper error handling
+            await remove_task(f'probation_{member.guild.id}_{member.id}')
 
 def setup(bot):
     bot.add_cog(Probation(bot))
