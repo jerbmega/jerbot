@@ -19,7 +19,7 @@ class PublicRoles(commands.Cog):
         server = config[str(ctx.guild.id)]
         successful = []
         for role in roles:
-            if role.name.lower() in server['public_roles']['public_roles']:
+            if role.name in server['public_roles']['public_roles']:
                 await ctx.author.add_roles(role)
                 successful.append(role.name)
         await ctx.send(f'Successfully joined {list_prettyprint(successful)}')
@@ -33,7 +33,7 @@ class PublicRoles(commands.Cog):
         server = config[str(ctx.guild.id)]
         successful = []
         for role in roles:
-            if role.name.lower() in server['public_roles']['public_roles']:
+            if role.name in server['public_roles']['public_roles']:
                 await ctx.author.remove_roles(role)
                 successful.append(role.name)
         await ctx.send(f'Successfully joined {list_prettyprint(successful)}')
