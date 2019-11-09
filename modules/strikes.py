@@ -30,6 +30,10 @@ class Strikes(commands.Cog):
         db.try_create_table(f'strikes_{ctx.guild.id}', ('id', 'issuer', 'reason'))
         db.try_create_table(f'probations_{ctx.guild.id}', ('id', 'reason', 'time'))
         for user in users:
+            try:
+                await remove_task(f'probation_{ctx.guild.id}_{user.id}')
+       	    except JobLookupError:
+                pass #TODO proper error handling
             await schedule_task(self.remove_probate, timedelta, f'probation_{ctx.guild.id}_{user.id}',
                                 [ctx, user, ctx.guild.id])
             db.insert(f'probations_{ctx.guild.id}', (user.id, reason, '24h'))
