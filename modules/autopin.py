@@ -20,7 +20,7 @@ class AutoPin(commands.Cog):
             return ctx.channel.id not in config[str(ctx.guild.id)]['autopin']['list']
 
     async def cog_check(self, ctx):
-        return module_enabled('autopin', ctx.guild.id) and self.check_roles(ctx) and self.check_channel(ctx)
+        return module_enabled('autopin', ctx.guild.id) and self.check_roles(ctx) #and self.check_channel(ctx)
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
@@ -28,20 +28,21 @@ class AutoPin(commands.Cog):
         tally = 0
         if user == self.bot.user:
             return
-        db.try_create_table(f'pins_{user.guild.id}', ('message', 'users', 'tally'))
+        if not reaction.message.channel.id == 137233143194320896:
+            return
+        db.try_create_table(f'pins_{user.guild.id}', ('message', 'users'))
 
         if not reaction.emoji == server['autopin']['reaction'] or reaction.message.pinned:
             return
 
         if reaction.message.id not in db.query(f'select message from pins_{user.guild.id}'):
-            db.insert(f'pins_{user.guild.id}', (reaction.message.id, user.id, 1))
+            db.insert(f'pins_{user.guild.id}', (reaction.message.id, user.id))
             await reaction.message.add_reaction(reaction.emoji)
         else:
-            if user.id not in db.query(f'select users from pins_{user.guild.id} where message = {reaction.message.id}'):
-                tally = db.query(f'select tally from pins_{user.guild.id} where message = {reaction.message.id}')[0]
-                db.c.execute(f'update pins_{user.guild.id} set tally = {tally + 1} '
-                             f'where message = {reaction.message.id}')
-                db.conn.commit()
+            users = db.query(f'select users from pins_{user.guild.id} where message = {reaction.message.id}')
+            if user.id not in users:
+                tally = len(db.query(f'select users from pins_{user.guild.id} where message = {reaction.message.id}'))
+                db.insert(f'pins_{user.guild.id}', (reaction.message.id, user.id))
         await reaction.message.remove_reaction(reaction.emoji, user)
 
         if tally == server['autopin']['threshold']:
