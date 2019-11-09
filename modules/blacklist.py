@@ -14,7 +14,7 @@ class Blacklist(commands.Cog):
             return
         for role in message.author.roles:
             if role.name.lower() in {i.lower() for i in server['blacklist']['overrides']}:
-                raise Exception("User is whitelisted.")
+                return
         for deletion in server['blacklist']['deletions']:
             for trigger in deletion['trigger']:
                 if trigger in re.sub(r'\s+', '', message.content.lower()):
