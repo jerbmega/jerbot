@@ -41,31 +41,31 @@ class ModUtil(commands.Cog):
 
     @check_roles('pins')
     @commands.command()
-    async def pin(self, ctx, ids: commands.Greedy[discord.TextChannel]):
+    async def pin(self, ctx, messages: commands.Greedy[discord.Message]):
         """
         Pins a message in a channel.
         """
         server = config[str(ctx.guild.id)]
         if ctx.channel.id not in server['pins']['channels'] and not \
-                (role in ctx.author.roles for role in server['staff']['roles']):
+                (role in ctx.author.roles for role in server['pins']['roles']):
             return
-        for id in ids:
-            await ctx.message.channel.fetch_message(id).pin()
-        await ctx.send(f"{list_prettyprint(ids)} pinned.")
+        for message in messages:
+            await message.pin()
+        await ctx.send(f"{list_prettyprint(str(message.id) for message in messages)} pinned.")
 
     @check_roles('pins')
     @commands.command()
-    async def unpin(self, ctx, ids: commands.Greedy[discord.TextChannel]):
+    async def unpin(self, ctx, ids: commands.Greedy[discord.Message]):
         """
         Unpins a message in a channel.
         """
         server = config[str(ctx.guild.id)]
         if ctx.channel.id not in server['pins']['channels'] and not \
-                (role in ctx.author.roles for role in server['staff']['roles']):
+                (role in ctx.author.roles for role in server['pins']['roles']):
             return
         for id in ids:
-            await ctx.message.channel.fetch_message(id).unpin()
-        await ctx.send(f"{list_prettyprint(ids)} unpinned.")
+            await message.unpin()
+        await ctx.send(f"{list_prettyprint(str(message.id) for message in messages)} unpinned.")
 
     @check_roles('staff')
     @commands.command()
