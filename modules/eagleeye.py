@@ -51,7 +51,7 @@ class EagleEye(commands.Cog):
         """
         Removes users that are no longer in the server from the watchlist.
         """
-        for id in db.query(f"SELECT DISTINCT username FROM eagleeye_{ctx.guild.id}"):
+        for id in db.query(f"SELECT DISTINCT id FROM eagleeye_{ctx.guild.id}"):
             if not self.bot.get_user(id):
                 db.remove(f'eagleeye_{ctx.guild.id}', f'id = {id}')
         await ctx.send('Purged.')
