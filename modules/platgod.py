@@ -50,7 +50,7 @@ class PlatGod(commands.Cog):
                 page = embed.title.split("/")
                 page = [int(page[0]), int(page[1])]
                 page[0] = page[0] - 1 if reaction.emoji == '⬅️' else page[0] + 1 if reaction.emoji == "➡️" else page[0]
-                page[0] = 1 if page[0] < 1 else page[1] if page[0] > page[1] else page[0]
+                page[0] = page[1] if page[0] < 1 else 1 if page[0] > page[1] else page[0]
                 embed.title = f'{page[0]}/{page[1]}'
                 embed.clear_fields()
                 item = embed.author.name.split("Search results for ")[1].split(" [")[0]
@@ -81,9 +81,10 @@ class PlatGod(commands.Cog):
                 details = item.parent.find_all("p")
                 for detail in details:
                     if "tags" not in str(detail) and str(detail) :
-                        print(f'{base_url} insert into platgod_{base_url.replace("-", "")} values (?, ?)',
+                        if not "birth Pills" in item_title.replace("+", ""):
+                            print(f'{base_url} insert into platgod_{base_url.replace("-", "")} values (?, ?)',
                                      (item_title, detail.text))
-                        db.c.execute(f'insert into platgod_{base_url.replace("-", "")} values (?, ?)',
+                            db.c.execute(f'insert into platgod_{base_url.replace("-", "")} values (?, ?)',
                                      (item_title, detail.text))
 
                 db.conn.commit()
