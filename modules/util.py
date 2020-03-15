@@ -68,7 +68,8 @@ async def write_embed(channel: channel, member: member, color, title, event='', 
     :param fields: Optional. [[title, content]]
     :param footer: Optional. Footer for the embed.
     :param message: Optional. Message string to send alongside the embed.
-    :param message: Optional. Description of the embed.
+    :param description: Optional. Description of the embed.
+    :returns Sent message
     """
     if fields is None:
         fields = []
@@ -81,7 +82,7 @@ async def write_embed(channel: channel, member: member, color, title, event='', 
             embed.add_field(name=field[0], value=field[1], inline=True)
     if footer:
         embed.set_footer(text=footer)
-    await bot.get_channel(channel).send(message, embed=embed)
+    return await bot.get_channel(channel).send(message, embed=embed)
 
 async def write_message(channel: channel, message: message):
     """
