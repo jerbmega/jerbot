@@ -1,9 +1,8 @@
 import discord.member
 import modules.db as db
 from discord.ext import commands
-from apscheduler.jobstores.base import JobLookupError
+from modules.probate_meta import probate_user, unprobate_user
 from modules.util import check_roles, config, list_prettyprint, module_enabled, parse_time, schedule_task, remove_task
-
 
 class Probation(commands.Cog):
     def __init__(self, bot):
@@ -12,10 +11,6 @@ class Probation(commands.Cog):
     async def cog_check(self, ctx):
         return check_roles('probate', ctx) and await module_enabled('probate', ctx.guild.id)
 
-    async def remove_probate(self, ctx, user, id):
-        db.remove(f'probations_{id}', f'id = {user.id}')
-        await user.remove_roles(discord.utils.get(ctx.guild.roles,
-                                                  name=config[str(ctx.guild.id)]['probate']['role_name']))
 
     @commands.command()
     async def probate(self, ctx, users: commands.Greedy[discord.Member], time: str = "24h", *, reason=""):
@@ -23,17 +18,8 @@ class Probation(commands.Cog):
         Locks users behind a probation role. This role will automatically be re-added if the user attempts to leave.
         Upon leaving, probation time will reset, and the user will be notified of such.
         """
-        timedelta = await parse_time(time)
-        db.try_create_table(f'probations_{ctx.guild.id}', ('id', 'reason', 'time'))
         for user in users:
-            await schedule_task(self.remove_probate, timedelta, f'probation_{ctx.guild.id}_{user.id}',
-                                [ctx, user, ctx.guild.id])
-            db.insert(f'probations_{ctx.guild.id}', (user.id, reason, time))
-            await user.add_roles(discord.utils.get(ctx.guild.roles,
-                                                   name=config[str(ctx.guild.id)]['probate']['role_name']))
-
-
-        print(db.query(f'SELECT reason FROM probations_{ctx.guild.id}'))
+            await probate_user(user, time, reason)
         await ctx.send(f'{list_prettyprint(user.name for user in users)} banished to the Shadow Realm.')
 
     @commands.command()
@@ -42,13 +28,7 @@ class Probation(commands.Cog):
         Immediately removes a user from probation, canceling the scheduled job.
         """
         for user in users:
-            try:
-                await remove_task(f'probation_{ctx.guild.id}_{user.id}')
-            except JobLookupError:
-                pass #TODO proper error handling
-            await user.remove_roles(discord.utils.get(ctx.guild.roles,
-                                                      name=config[str(ctx.guild.id)]['probate']['role_name']))
-            db.remove(f'probations_{ctx.guild.id}', f'id = {user.id}')
+            await unprobate_user(user)
         await ctx.send(f'{list_prettyprint(user.name for user in users)} released from the Shadow Realm.')
 
     @commands.command()
@@ -72,9 +52,10 @@ class Probation(commands.Cog):
 
             time = await parse_time(db.query(f'SELECT DISTINCT time FROM probations_{member.guild.id} '
                                          f'WHERE id = {member.id}')[0])
-            print(time)
-            await schedule_task(self.remove_probate, time,
-                                f'probation_{member.guild.id}_{member.id}', [member, member, member.guild.id])
+            reason = db.query(f'SELECT DISTINCT reason FROM probations_{member.guild.id} where id = {member.id}'[0])
+            await probate_user(member, time, reason)
+            await schedule_task(unprobate_user, time,
+                                f'probation_{member.guild.id}_{member.id}', [member])
             await member.add_roles(discord.utils.get(member.guild.roles,
                                                    name=server['probate']['role_name']))
             await member.send(f'You left {member.guild.name} while you were in probation, so the role has been '

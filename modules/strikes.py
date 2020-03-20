@@ -1,10 +1,10 @@
 import re
 import discord.member
 import modules.db as db
+from modules.probate_meta import probate_user, unprobate_user
 from discord.ext import commands
 from apscheduler.jobstores.base import JobLookupError
-from modules.util import check_roles, config, list_prettyprint, module_enabled, parse_time, schedule_task, remove_task, \
-    write_embed
+from modules.util import check_roles, config, list_prettyprint, module_enabled, remove_task, write_embed
 
 
 class Strikes(commands.Cog):
@@ -14,11 +14,6 @@ class Strikes(commands.Cog):
     async def cog_check(self, ctx):
         return check_roles('strikes', ctx) and await module_enabled('strikes', ctx.guild.id)
 
-    async def remove_probate(self, ctx, user, id):
-        db.remove(f'probations_{id}', f'id = {user.id}')
-        await user.remove_roles(discord.utils.get(ctx.guild.roles,
-                                                  name=config[str(ctx.guild.id)]['probate']['role_name']))
-
     @commands.command()
     async def strike(self, ctx, users: commands.Greedy[discord.Member], *, reason):
         """
@@ -26,19 +21,13 @@ class Strikes(commands.Cog):
         A 24 hour probation will additionally be applied.
         """
         server = config[str(ctx.guild.id)]
-        timedelta = await parse_time('24h')
         db.try_create_table(f'strikes_{ctx.guild.id}', ('id', 'issuer', 'reason'))
-        db.try_create_table(f'probations_{ctx.guild.id}', ('id', 'reason', 'time'))
         for user in users:
             try:
                 await remove_task(f'probation_{ctx.guild.id}_{user.id}')
-       	    except JobLookupError:
+            except JobLookupError:
                 pass #TODO proper error handling
-            await schedule_task(self.remove_probate, timedelta, f'probation_{ctx.guild.id}_{user.id}',
-                                [ctx, user, ctx.guild.id])
-            db.insert(f'probations_{ctx.guild.id}', (user.id, reason, '24h'))
-            await user.add_roles(discord.utils.get(ctx.guild.roles,
-                                                   name=config[str(ctx.guild.id)]['probate']['role_name']))
+            await probate_user(user, "24h", reason)
             db.insert(f'strikes_{ctx.guild.id}', (user.id, ctx.author.id, reason))
             amount = len(db.query(f'SELECT reason from strikes_{ctx.guild.id} WHERE id = {user.id}'))
             await write_embed(server['modlog_id'], member=None, color=server['strikes']['embed_color'], title=reason,
@@ -76,9 +65,7 @@ class Strikes(commands.Cog):
             await remove_task(f'probation_{ctx.guild.id}_{user.id}')
         except JobLookupError:
             pass #TODO proper error handling
-        db.remove(f'probations_{ctx.guild.id}', f'id = {user.id}')
-        await user.remove_roles(discord.utils.get(ctx.guild.roles,
-                                                    name=config[str(ctx.guild.id)]['probate']['role_name']))
+        await unprobate_user(user)
 
         removal = strikes[index - 1]
         db.remove(f'strikes_{ctx.guild.id}', f'id = {user.id} and reason = "{removal}"')
