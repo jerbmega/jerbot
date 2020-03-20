@@ -43,7 +43,6 @@ class PlatGod(commands.Cog):
     async def on_reaction_add(self, reaction, user):
         if user == self.bot.user:
             return
-        await reaction.message.remove_reaction(reaction.emoji, user)
 
         for embed in reaction.message.embeds:
             if "Search results for" in embed.author.name:
@@ -60,6 +59,7 @@ class PlatGod(commands.Cog):
                 embed.add_field(name=items[page[0] - 1], value="\n".join(
                     db.query(f'select detail from platgod_{ver} where item ="{items[page[0] - 1]}"')[1:]))
                 await reaction.message.edit(embed=embed)
+                await reaction.message.remove_reaction(reaction.emoji, user)
 
     @commands.command()
     @commands.is_owner()
