@@ -72,6 +72,8 @@ class Probation(commands.Cog):
         if module_enabled('probate', member.guild.id) and member.id in db.query(
                 f'SELECT DISTINCT id FROM probations_{member.guild.id}'):
             await remove_task(f'probation_{member.guild.id}_{member.id}')
+            channel = discord.utils.get(member.guild.text_channels, name=f"probation_{member.id}")
+            await channel.delete()
 
 def setup(bot):
     bot.add_cog(Probation(bot))

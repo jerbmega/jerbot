@@ -23,7 +23,8 @@ class Blacklist(commands.Cog):
                     await write_embed(server['modlog_id'], message.author, server['blacklist']['embed_color'],
                                       f'Message matched deletion pattern {deletion["trigger"]}', 'Blacklisted phrase.',
                                       fields=[['Message content', message.content]],
-                                      message=f'{message.author.mention} **{deletion["log"]}** in {message.channel.id}')
+                                      message=f'{message.author.mention} **{deletion["log"]}** in '
+                                              f'<#{message.channel.id}>')
 
     @commands.Cog.listener()
     async def on_message(self, message):
