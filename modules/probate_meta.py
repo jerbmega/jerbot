@@ -24,7 +24,8 @@ async def probate_user(user, time, reason):
     if f'probation_{user.id}' not in [channel.name for channel in user.guild.text_channels]:
         overwrites[user] = discord.PermissionOverwrite(read_messages=True)
         channel = await user.guild.create_text_channel(f'probation_{user.id}', overwrites=overwrites,
-                                                       category=category)
+                                                       category=category,
+                                                       topic=f'{user.mention} - {time} - {reason}')
         await schedule_task(unprobate_user, timedelta, f'probation_{user.guild.id}_{user.id}',
                             [user])
         db.insert(f'probations_{user.guild.id}', (user.id, reason, time))
