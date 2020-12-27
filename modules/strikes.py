@@ -65,8 +65,10 @@ class Strikes(commands.Cog):
             await remove_task(f'probation_{ctx.guild.id}_{user.id}')
         except JobLookupError:
             pass #TODO proper error handling
-        await unprobate_user(user)
-
+        try:
+            await unprobate_user(user)
+        except Exception as e:
+            pass
         removal = strikes[index - 1]
         db.remove(f'strikes_{ctx.guild.id}', f'id = {user.id} and reason = "{removal}"')
         await user.send(f'You have been pardoned of a strike on {ctx.guild.name}. ' \
