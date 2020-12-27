@@ -9,6 +9,7 @@ async def probate_user(user, time, reason):
     db.try_create_table(f'probations_{user.guild.id}', ('id', 'reason', 'time'))
     category = discord.utils.get(user.guild.categories, name="Probations")
     role = discord.utils.get(user.guild.roles, name=config[str(user.guild.id)]['probate']['role_name'])
+    channel = discord.utils.get(user.guild.channels, name=f'probation_{user.id}')
     overwrites = {
         user.guild.default_role: discord.PermissionOverwrite(read_messages=False),
         user.guild.me: discord.PermissionOverwrite(read_messages=True),
@@ -21,15 +22,20 @@ async def probate_user(user, time, reason):
         category_overwrites = overwrites
         category_overwrites[role] = discord.PermissionOverwrite(read_messages=False)
         category = await user.guild.create_category("Probations", overwrites=category_overwrites)
-    if f'probation_{user.id}' not in [channel.name for channel in user.guild.text_channels]:
-        overwrites[user] = discord.PermissionOverwrite(read_messages=True)
+    overwrites[user] = discord.PermissionOverwrite(read_messages=True)
+    if not channel:
         channel = await user.guild.create_text_channel(f'probation_{user.id}', overwrites=overwrites,
                                                        category=category,
                                                        topic=f'{user.mention} - {time} - {reason}')
+    else:
+        await channel.set_permissions(user, overwrite=discord.PermissionOverwrite(read_messages=True))
+    try:
         await schedule_task(unprobate_user, timedelta, f'probation_{user.guild.id}_{user.id}',
-                            [user])
-        db.insert(f'probations_{user.guild.id}', (user.id, reason, time))
-        await user.add_roles(role)
+                        [user])
+    except:
+        pass
+    db.insert(f'probations_{user.guild.id}', (user.id, reason, time))
+    await user.add_roles(role)
 
 
 async def unprobate_user(user):
