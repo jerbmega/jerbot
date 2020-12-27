@@ -36,7 +36,7 @@ class PublicRoles(commands.Cog):
             if role.name in server['public_roles']['public_roles']:
                 await ctx.author.remove_roles(role)
                 successful.append(role.name)
-        await ctx.send(f'Successfully joined {list_prettyprint(successful)}')
+        await ctx.send(f'Successfully left {list_prettyprint(successful)}')
 
     @commands.command()
     async def listroles(self, ctx):
