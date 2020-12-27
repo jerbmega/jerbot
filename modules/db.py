@@ -55,6 +55,14 @@ def remove(table:str, exp: str):
     c.execute(f'DELETE FROM {table} WHERE {exp}')
     conn.commit()
 
+def update(table:str, exp: str):
+    """
+    Updates value in the table.
+    :param table: String corresponding to a table in the SQLite database.
+    :param exp: Expression for updating.
+    """
+    c.execute(f'UPDATE {table} SET {exp}')
+    conn.commit()
 
 def query(query: str):
     """
