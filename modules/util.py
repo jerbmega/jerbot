@@ -2,11 +2,13 @@ import os
 import re
 import yaml
 from datetime import datetime, timedelta
-from discord import Embed, channel, member, message
+from discord import Embed, channel, member, message, Intents
 from discord.ext import commands
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-bot = commands.Bot(command_prefix="!")
+intents = Intents.default()
+intents.members=True
+bot = commands.Bot(command_prefix="!", intents=intents)
 config = {}
 scheduler = AsyncIOScheduler()
 scheduler.start()
@@ -101,10 +103,13 @@ def check_roles(command: str, ctx = None):
     """
 
     def predicate(ctx):
-        for role in ctx.message.author.roles:
-            if role.name.lower() in {i.lower() for i in config[str(ctx.guild.id)][command]['roles']}:
-                return True
-        return False
+        try:
+            for role in ctx.message.author.roles:
+                if role.name.lower() in {i.lower() for i in config[str(ctx.guild.id)][command]['roles']}:
+                    return True
+            return False
+        except:
+            return False
 
     if ctx:
         return predicate(ctx)
