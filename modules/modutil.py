@@ -77,8 +77,6 @@ class ModUtil(commands.Cog):
         def check(message):
             return message.author in users if users else True
         deletes = await ctx.channel.purge(limit=num + 1, check=check)
-        await ctx.send(f'Deleted {len(deletes - 1)} message{"" if len(deletes) == 1 else "s"}'
-                       f'{(" by " + list_prettyprint(user.name for user in users) if users else "")}.')
 
     @commands.is_owner()
     @commands.command()
@@ -92,6 +90,9 @@ class ModUtil(commands.Cog):
                     await write_message(config[server]['modlog_id'], f'**IMPORTANT:** {announcement}')
                 except AttributeError:
                     pass
+                except discord.Forbidden:
+                    await ctx.send(f"Skipped {server} due to permission issues.")
+        await ctx.send("Announcement has been sent.")
 
     @commands.is_owner()
     @commands.command()
