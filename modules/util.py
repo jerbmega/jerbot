@@ -132,10 +132,18 @@ async def parse_time(time: str):
     :param parsestring: Input string
     :return: timedelta
     """
-    case = dict(d=timedelta(days=int(re.sub(r'\D', '', time))), h=timedelta(hours=int(re.sub(r'\D', '', time))),
-                m=timedelta(minutes=int(re.sub(r'\D', '', time))),
-                s=timedelta(seconds=int(re.sub(r'\D', '', time))))
-    return case.get(time[-1])
+    try:
+        #TODO proper years/months? maybe?
+        case = dict(y=timedelta(weeks=int(re.sub(r'\D', '', time)) * 52), # timedelta doesn't support years :(
+                    o=timedelta(weeks=int(re.sub(r'\D', '', time)) * 4), # or months :(
+                    w=timedelta(weeks=int(re.sub(r'\D', '', time))),
+                    d=timedelta(days=int(re.sub(r'\D', '', time))),
+                    h=timedelta(hours=int(re.sub(r'\D', '', time))),
+                    m=timedelta(minutes=int(re.sub(r'\D', '', time))),
+                    s=timedelta(seconds=int(re.sub(r'\D', '', time))))
+        return case.get(time[-1])
+    except ValueError:
+        return None
 
 
 async def schedule_task(task, time: timedelta, id: str, args: list = None):
@@ -147,6 +155,8 @@ async def schedule_task(task, time: timedelta, id: str, args: list = None):
     :param args: Arguments to pass to the task. Optional.
     '''
     scheduler.add_job(task, 'date', run_date=datetime.now() + time, args=args, id=id)
+
+
 
 
 async def remove_task(id):
