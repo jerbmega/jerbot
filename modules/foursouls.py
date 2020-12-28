@@ -447,7 +447,7 @@ class FourSouls(commands.Cog):
         [["red proglottid"], "https://i.imgur.com/ZUxqqJY.png"],
         [["pink proglottid"], "https://i.imgur.com/3tPoQvX.png"],
         [["white proglottid"], "https://i.imgur.com/EkX8vBL.png"],
-        [["proglottid", "Please specify: black proglottid, red proglottid, red proglottid, white proglottid"]],
+        [["proglottid"], "Please specify: black proglottid, red proglottid, pink proglottid, white proglottid"],
         [["dickknot", "dick knot"], "**NSFW** ||https://i.imgur.com/oWpFf8j.png||"],
         [["curse"], "http://pop-life.com/foursouls/data/cards/006TheCurse(4).png"],
         [["mom"], "http://pop-life.com/foursouls/data/cards/104Mom!.png"],
@@ -460,7 +460,7 @@ class FourSouls(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        guilds = [123641386921754625, 485099143786922018] 
+        guilds = [123641386921754625, 485099143786922018, 273609483060641792]
         if not message.guild.id in guilds:
             return
         regex = re.compile('[^a-zA-Z0-9? ]')
@@ -471,13 +471,13 @@ class FourSouls(commands.Cog):
                     for name in link[0]:
                         if string == name:
                             await message.channel.send(link[1])
-                            raise Stop
+                            raise Exception("Stop")
                 for link in self.links:
                     for name in link[0]:
                         if name in string:
                             await message.channel.send(link[1])
-                            raise Stop
-        except Stop:
+                            raise Exception("Stop")
+        except Exception:
             pass
 
 
