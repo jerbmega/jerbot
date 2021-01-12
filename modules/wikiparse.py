@@ -1,8 +1,7 @@
 from discord.ext import commands
 import requests
 from bs4 import BeautifulSoup
-import modules.db as db
-import discord.member
+import re
 
 
 class WikiParse(commands.Cog):
@@ -26,9 +25,14 @@ class WikiParse(commands.Cog):
             else "bindingofisaacrebirth"
         parse = ' '.join(parse) if subdomain == "bindingofisaacrebirth" else parse[1]
         page = requests.get(f"https://{subdomain}.gamepedia.com/index.php?search={parse}")
-        message = f"I couldn't find an exact match. Here is a link to this query's search page. {page.url}" \
-            if "search" in page.url else page.url
-        await ctx.send(message)
+        if "search" in page.url:
+            soup = BeautifulSoup(page.content, 'html.parser')
+            if re.sub(r'\W+', '', parse.lower()) == \
+                    re.sub(r'\W+', '', soup.find(class_="unified-search__result__title").get("data-title").lower()):
+                await ctx.send(soup.find(class_="unified-search__result__title").get("href"))
+            else:
+                await ctx.send(f"I couldn't find an exact match. Here is a link to this query's search page. {page.url}")
+        else: await ctx.send(page.url)
 
 def setup(bot):
     bot.add_cog(WikiParse(bot))
