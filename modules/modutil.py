@@ -1,4 +1,5 @@
 import discord.member
+from discord import Object
 from discord.ext import commands
 from modules.util import config, check_roles, write_message, list_prettyprint
 import re
@@ -96,22 +97,20 @@ class ModUtil(commands.Cog):
 
     @commands.is_owner()
     @commands.command()
-    async def global_ban(self, ctx, users: commands.Greedy[discord.User], *, reason: str = None):
+    async def global_ban(self, ctx, *, users: str):
         """
         Bans a user from every server Jerbot is deployed in. Dangerous. Owner only.
         Only use in the event that a user is a known raider or part of a spambot.
         """
-        if not reason:
-            reason = "No reason provided."
-
+        users = users.split(" ")
         edit_message = await ctx.send("Global in progress. This may take a long time.")
         for guild in self.bot.guilds:
             try:
                 for user in users:
-                    await guild.ban(user, reason=f"Global ban: {reason}")
+                    await guild.ban(Object(id=int(user)), reason=f"Global ban.")
             except discord.Forbidden:
                 pass
-        await edit_message.edit(content=f'{list_prettyprint(user.name for user in users)} globally banned.')
+        await edit_message.edit(content=f'Global ban successfully processed on {len(users)} users.')
 
 
 def setup(bot):
