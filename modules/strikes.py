@@ -71,7 +71,7 @@ class Strikes(commands.Cog):
                     await remove_task(f'probation_{ctx.guild.id}_{user.id}')
                 except JobLookupError:
                     pass  # TODO proper error handling
-                await ctx.guild.ban(user)
+                await ctx.guild.ban(user, delete_message_days=0)
             elif server['strikes']['kick']['enabled'] and amount >= server['strikes']['kick']['amount']:
                 await user.send(base_message + f'As this is strike {amount}, you have been automatically kicked.')
                 try:
