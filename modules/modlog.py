@@ -33,8 +33,8 @@ class ModLog(commands.Cog):
                           f'{member.name}#{member.discriminator}', 'Member left.', fields=fields)
 
     @commands.Cog.listener()
-    async def on_member_ban(self, member):
-        server = config[str(member.guild.id)]
+    async def on_member_ban(self, guild, member):
+        server = config[str(guild.id)]
         if not server['join_leave_logs']['enabled']:
             return
         await write_embed(server['modlog_id'], member, server['join_leave_logs']['leave_color'],
