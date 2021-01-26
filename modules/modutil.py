@@ -25,10 +25,23 @@ class ModUtil(commands.Cog):
         """
         Bans users from the server.
         """
+        if len(users) == 0:
+            raise Exception("No users found. Did you mean to hackban?")
         for user in users:
             await ctx.guild.ban(user, reason=f'{reason + " " if reason else ""}(Issued by {ctx.author.name})',
                                 delete_message_days=0)
         await ctx.send(f'{list_prettyprint(user.name for user in users)} banned.')
+
+    @commands.has_permissions(ban_members=True)
+    @commands.command()
+    async def hackban(self, ctx, users: commands.Greedy[int], *, reason: str = None):
+        """
+        Hackbans users from the server.
+        """
+        for user in users:
+            await ctx.guild.ban(user, reason=f'{reason + " " if reason else ""}(Hackban. Issued by {ctx.author.name})',
+                                delete_message_days=0)
+        await ctx.send(f'Successfully banned {len(users)} users.')
 
     @commands.has_permissions(ban_members=True)
     @commands.command()
@@ -97,17 +110,16 @@ class ModUtil(commands.Cog):
 
     @commands.is_owner()
     @commands.command()
-    async def global_ban(self, ctx, *, users: str):
+    async def global_ban(self, ctx, users: commands.Greedy[int], *, reason: str = None):
         """
         Bans a user from every server Jerbot is deployed in. Dangerous. Owner only.
         Only use in the event that a user is a known raider or part of a spambot.
         """
-        users = users.split(" ")
         edit_message = await ctx.send("Global in progress. This may take a long time.")
         for guild in self.bot.guilds:
             try:
                 for user in users:
-                    await guild.ban(Object(id=int(user)), reason=f"Global ban.")
+                    await guild.ban(Object(id=user), reason=f"Global ban: {reason if reason else 'No reason provided.'}")
             except discord.Forbidden:
                 pass
         await edit_message.edit(content=f'Global ban successfully processed on {len(users)} users.')
