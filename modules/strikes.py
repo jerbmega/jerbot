@@ -61,14 +61,12 @@ class Strikes(commands.Cog):
                            f'The provided reason is `{reason}`. '
             if not isinstance(time, str):
                 base_message = base_message + f"\nThis strike is **temporary**, and is set to expire on " \
-                                              f"{datetime.datetime.utcfromtimestamp(time).replace(microsecond=0)} UTC."
+                                              f"{datetime.datetime.utcfromtimestamp(time).replace(microsecond=0)} UTC. You will be removed from probation in 24 hours."
 
                 scheduler.add_job(remove_strike, 'date', run_date=datetime.datetime.fromtimestamp(time),
                                   args=[ctx.guild.id, [user.id, ctx.author.id, reason, time]], id=f"strikeremoval_{server}_{time}")
             if server['strikes']['ban']['enabled'] and amount >= server['strikes']['ban']['amount']:
-                await user.send(base_message + f'As this is strike {amount}, you have been automatically banned. '
-                                               f'If you have temporary strikes, you will be pardoned once the strikes have expired. '
-                                               f'Please note that, unless specified, all strikes are permanent.')
+                await user.send(base_message + f'As this is strike {amount}, you have been automatically banned.')
                 try:
                     await remove_task(f'probation_{ctx.guild.id}_{user.id}')
                 except JobLookupError:
