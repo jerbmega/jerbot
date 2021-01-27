@@ -7,9 +7,9 @@ from discord.ext import commands
 from apscheduler.jobstores.base import JobLookupError
 from sqlite3 import OperationalError
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from modules.util import check_roles, config, list_prettyprint, module_enabled, remove_task, write_embed, parse_time, \
-    scheduler
+from modules.util import check_roles, config, list_prettyprint, module_enabled, remove_task, write_embed, parse_time
 
+scheduler = AsyncIOScheduler()
 
 async def remove_strike(server, strike):
     db.remove(f'strikes_{server}', f'id = {strike[0]} and time = {strike[3]}')
@@ -142,3 +142,6 @@ def setup(bot):
             except TypeError:
                 pass
     bot.add_cog(Strikes(bot))
+
+def teardown(bot):
+    scheduler.remove_all_jobs()
