@@ -3,6 +3,7 @@ from discord import Object
 from discord.ext import commands
 from modules.util import config, check_roles, write_message, list_prettyprint
 import re
+import requests
 
 
 class ModUtil(commands.Cog):
@@ -69,7 +70,7 @@ class ModUtil(commands.Cog):
 
     @check_roles('pins')
     @commands.command()
-    async def unpin(self, ctx, ids: commands.Greedy[discord.Message]):
+    async def unpin(self, ctx, messages: commands.Greedy[discord.Message]):
         """
         Unpins a message in a channel.
         """
@@ -77,7 +78,7 @@ class ModUtil(commands.Cog):
         if ctx.channel.id not in server['pins']['channels'] and not \
                 (role in ctx.author.roles for role in server['pins']['roles']):
             return
-        for id in ids:
+        for message in messages:
             await message.unpin()
         await ctx.send(f"{list_prettyprint(str(message.id) for message in messages)} unpinned.")
 
@@ -115,7 +116,15 @@ class ModUtil(commands.Cog):
         Bans a user from every server Jerbot is deployed in. Dangerous. Owner only.
         Only use in the event that a user is a known raider or part of a spambot.
         """
-        edit_message = await ctx.send("Global in progress. This may take a long time.")
+        edit_message = await ctx.send("Global ban in progress. This may take a long time.")
+        if len(users) == 0 and len(ctx.message.attachments) > 0:
+            for attachment in ctx.message.attachments:
+                if attachment.filename.endswith(".txt"):
+                    userlist = requests.get(attachment.url).text.split(" ")
+                    for line in userlist:
+                        line = line.split(" ")
+                        for user in line:
+                            users.append(int(user))
         for guild in self.bot.guilds:
             try:
                 for user in users:
