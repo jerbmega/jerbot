@@ -58,7 +58,6 @@ class Items(commands.Cog):
                       f'amount = {db.query(f"select amount from items_progress where user = {message.author.id}")[0] + 1} '
                       f'where user = {message.author.id}')
         except Exception as e:
-            print('making new row: {e}')
             db.insert('items_progress', (message.author.id, 1, 0))
         try:
             await remove_task(f"items_{message.author.id}")
