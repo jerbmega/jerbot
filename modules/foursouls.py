@@ -455,7 +455,9 @@ class FourSouls(commands.Cog):
         [["guppy"], "http://pop-life.com/foursouls/data/cards/001Guppy%20(2).png"],
         [["pin"], "http://pop-life.com/foursouls/data/cards/093Pin.png"],
         [["shadow"], "http://pop-life.com/foursouls/data/cards/038Shadow(1).png"],
-        [["greed"], "Please specify: greed (character), greed (boss)"]
+        [["greed"], "Please specify: greed (character), greed (boss)"],
+	[["corrupteddata", "corrupted data"], "https://i.ibb.co/82z02C0/Untitled.png"],
+	[["ultrapride", "ultra pride"], "https://i.ibb.co/dQGzM2B/Untitled.png"] 
     ]
 
     @commands.Cog.listener()
