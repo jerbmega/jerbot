@@ -435,7 +435,7 @@ class FourSouls(commands.Cog):
         [["bumbo"], "Please specify: bum-bo (character), bum-bo (treasure)"],
         [["isaac"], "Please specify: isaac (character), isaac (boss)"],
         [["lil gish"], "http://cloud-3.steamusercontent.com/ugc/1023950208133509619/07C6B7E1E799263D9D42ECFBB9B188E8ECC78690/"],
-        [["gish"], "http://cloud-3.steamusercontent.com/ugc/1023950208133503235/0A0829BCE5E5F7ACD4D569750D502461D2206B11/"],
+        [["gish"], "https://i.imgur.com/Lv3lAsP.jpg"],
         [["dead eye"], "https://croc.pw/foursouls/dead_eye.png"],
         [["marked"], "https://croc.pw/foursouls/marked.png"],
         [["epic fetus"], "https://croc.pw/foursouls/epic_fetus.png"],
@@ -457,7 +457,9 @@ class FourSouls(commands.Cog):
         [["shadow"], "http://pop-life.com/foursouls/data/cards/038Shadow(1).png"],
         [["greed"], "Please specify: greed (character), greed (boss)"],
 	[["corrupteddata", "corrupted data"], "https://i.ibb.co/82z02C0/Untitled.png"],
-	[["ultrapride", "ultra pride"], "https://i.ibb.co/dQGzM2B/Untitled.png"] 
+	[["ultrapride", "ultra pride"], "https://i.ibb.co/dQGzM2B/Untitled.png"],
+	[["edengirl", "girleden", "eden girl", "girl eden"], "https://i.imgur.com/wwFwbOo.png"],
+	[["edenboy", "boyeden", "eden boy", "boy eden"], "https://i.imgur.com/OOwGph7.png"]   
     ]
 
     @commands.Cog.listener()
