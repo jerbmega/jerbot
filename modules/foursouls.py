@@ -434,7 +434,7 @@ class FourSouls(commands.Cog):
         [["widow"], "http://pop-life.com/foursouls/data/cards/022Widow.png"],
         [["bumbo"], "Please specify: bum-bo (character), bum-bo (treasure)"],
         [["isaac"], "Please specify: isaac (character), isaac (boss)"],
-        [["lil gish"], "http://cloud-3.steamusercontent.com/ugc/1023950208133509619/07C6B7E1E799263D9D42ECFBB9B188E8ECC78690/"],
+        [["lil gish"], "https://cdn.discordapp.com/attachments/485099143786922030/808457596004073533/Lil_Gish_final_hopefully.png"],
         [["gish"], "https://i.imgur.com/Lv3lAsP.jpg"],
         [["dead eye"], "https://croc.pw/foursouls/dead_eye.png"],
         [["marked"], "https://croc.pw/foursouls/marked.png"],
