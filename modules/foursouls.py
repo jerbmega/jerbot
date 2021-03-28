@@ -276,6 +276,8 @@ class FourSouls(commands.Cog):
         [["satan"], "http://pop-life.com/foursouls/data/cards/105Satan!.png"],
         [["blue baby"], "http://pop-life.com/foursouls/data/cards/008BlueBaby(1).png"],
         [["cain"], "http://pop-life.com/foursouls/data/cards/002Cain(1).png"],
+	[["edengirl", "girleden", "eden girl", "girl eden"], "https://i.imgur.com/wwFwbOo.png"],
+	[["edenboy", "boyeden", "eden boy", "boy eden"], "https://i.imgur.com/OOwGph7.png"], 
         [["eden"], "http://pop-life.com/foursouls/data/cards/011Eden(1).png"],
         [["eve"], "http://pop-life.com/foursouls/data/cards/006Eve(1).png"],
         [["isaac character"], "http://pop-life.com/foursouls/data/cards/001Isaac(1).png"],
@@ -456,10 +458,9 @@ class FourSouls(commands.Cog):
         [["pin"], "http://pop-life.com/foursouls/data/cards/093Pin.png"],
         [["shadow"], "http://pop-life.com/foursouls/data/cards/038Shadow(1).png"],
         [["greed"], "Please specify: greed (character), greed (boss)"],
-	[["corrupteddata", "corrupted data"], "https://i.ibb.co/82z02C0/Untitled.png"],
-	[["ultrapride", "ultra pride"], "https://i.ibb.co/dQGzM2B/Untitled.png"],
-	[["edengirl", "girleden", "eden girl", "girl eden"], "https://i.imgur.com/wwFwbOo.png"],
-	[["edenboy", "boyeden", "eden boy", "boy eden"], "https://i.imgur.com/OOwGph7.png"]   
+	[["corrupteddata", "corrupted data"], "https://i.imgur.com/1JXpk7r.png"],
+	[["ultrapride", "ultra pride"], "https://i.imgur.com/b2e5XDj.png"],
+  	[["it lives"], "https://i.imgur.com/Wl47e0L.png"]
     ]
 
     @commands.Cog.listener()
