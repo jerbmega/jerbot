@@ -1,8 +1,9 @@
 # Jerbot Reheated
 ## Third rewrite's the charm?
 
-*"Let's do it right this time, so I never have to rewrite this bot again.*
-- me, writing jerbot2 and jerbot-neo
+*"Let's do it right this time, so I never have to rewrite this bot again."*
+
+*-me, writing jerbot2 and jerbot-neo*
 
 
 
