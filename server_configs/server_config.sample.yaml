@@ -1,0 +1,8 @@
+### One of these files needs to exist for every server Jerbot is deployed into.
+### Rename this file to the ID of the server being configured.
+
+# This configures the automessage plugin, which sends an automatic message at the specified interval.
+automessage:
+  - crontab:  "* * * * *" # This example crontab runs the automessage task every minute. Generate your own at https://crontab.guru/
+    channel:  YOUR_CHANNEL_ID_HERE
+    message:  "YOUR_MESSAGE_CONTENT_HERE"

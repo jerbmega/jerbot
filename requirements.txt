@@ -1,4 +1,6 @@
 hikari
-hikari-lightbulb[crontrigger]
+hikari-lightbulb
 pyyaml
+sqlalchemy
+apscheduler
 git+https://github.com/Rapptz/asqlite

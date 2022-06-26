@@ -33,7 +33,6 @@ def load_plugin_configs(plugin: str, datastore: lightbulb.utils.data_store.DataS
 
 """
 TODO
-Auto message functionality
 Blacklist functionality
 Eagle Eye
 Item functionality
