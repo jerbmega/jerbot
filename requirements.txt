@@ -1,0 +1,4 @@
+hikari
+hikari-lightbulb
+pyyaml
+git+https://github.com/Rapptz/asqlite
