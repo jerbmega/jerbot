@@ -1,22 +1,34 @@
 import hikari
 import lightbulb
-from lightbulb.ext import tasks
 import yaml
-
-with open("config.yaml") as cfg:
-    config = yaml.safe_load(cfg)
+import os
 
 
 def load_config():
-    bot.d = config
+    with open("config.yaml") as cfg:
+        container = yaml.safe_load(cfg)
+    return container
 
 
 if __name__ == "__main__":
+    config = load_config()
     bot = lightbulb.BotApp(token=config["token"])
-    load_config()
+    bot.d = load_config()
     bot.load_extensions_from("plugins")
-    tasks.load(bot)
     bot.run()
+
+
+def load_plugin_configs(plugin: str, datastore: lightbulb.utils.data_store.DataStore()):
+    for config in os.listdir("server_configs"):
+        if not "config" in datastore:
+            datastore["config"] = {}
+
+        if "sample.yaml" not in config:
+            with open(f"server_configs/{config}") as cfg:
+                server_id = int(config.split(".")[0])
+                if not server_id in datastore["config"]:
+                    datastore["config"][server_id] = {}
+                datastore["config"][server_id] = yaml.safe_load(cfg)["automessage"]
 
 
 """
