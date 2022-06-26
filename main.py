@@ -15,7 +15,6 @@ if __name__ == "__main__":
 TODO
 Auto message functionality
 Blacklist functionality
-Database parsing (use separate databases in a separate folder, use asqlite)
 Eagle Eye
 Item functionality
 Levenshtein distance filtering (thefuzz + score?)
