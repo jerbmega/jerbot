@@ -13,7 +13,8 @@ venv.bak/
 config.yaml
 
 db/
-server_configs/
+server_configs/*
+!server_configs/server_config.sample.yaml
 
 .pytest_cache
 .vscode
