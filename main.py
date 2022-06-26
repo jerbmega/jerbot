@@ -12,7 +12,9 @@ def load_config():
 
 if __name__ == "__main__":
     config = load_config()
-    bot = lightbulb.BotApp(token=config["token"])
+    bot = lightbulb.BotApp(
+        token=config["token"], default_enabled_guilds=(config["testing_guild"])
+    )  # TODO remove enabled guilds for production
     bot.d = load_config()
     bot.load_extensions_from("plugins")
     bot.run()
