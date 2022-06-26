@@ -19,7 +19,6 @@ Database parsing (use separate databases in a separate folder, use asqlite)
 Eagle Eye
 Item functionality
 Levenshtein distance filtering (thefuzz + score?)
-Bot management functionality
 Modlogs
 Moderation utilities (most of these are probably retired in favor of slash commands)
 Platinum God parsing
