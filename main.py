@@ -28,7 +28,9 @@ def load_plugin_configs(plugin: str, datastore: lightbulb.utils.data_store.DataS
                 server_id = int(config.split(".")[0])
                 if not server_id in datastore["config"]:
                     datastore["config"][server_id] = {}
-                datastore["config"][server_id] = yaml.safe_load(cfg)["automessage"]
+                config = yaml.safe_load(cfg)
+                if plugin in config:
+                    datastore["config"][server_id] = config[plugin]
 
 
 """
