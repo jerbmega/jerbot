@@ -5,7 +5,6 @@ import lightbulb
 
 import db
 import os
-from main import config
 
 plugin = lightbulb.Plugin("Meta")
 plugin.add_checks(lightbulb.owner_only)
