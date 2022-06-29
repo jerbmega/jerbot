@@ -3,4 +3,6 @@ hikari-lightbulb
 pyyaml
 sqlalchemy
 apscheduler
+wordninja
+unidecode
 git+https://github.com/Rapptz/asqlite
