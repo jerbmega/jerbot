@@ -1,10 +1,9 @@
-# This plugin handles automatic logging of joins, leaves, kicks, bans, edits, and deletions.
+# This plugin handles automatic logging of joins, leaves, bans, edits, and deletions.
 
 import hikari
 import lightbulb
 from datetime import datetime
 
-import db
 import main
 
 plugin = lightbulb.Plugin("Mod Logs", include_datastore=True)

@@ -3,7 +3,6 @@
 import hikari
 import lightbulb
 
-import db
 import os
 
 plugin = lightbulb.Plugin("Meta")
