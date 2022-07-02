@@ -26,7 +26,7 @@ async def create_table(database: str, table: str, keys: tuple):
                 await conn.commit()
 
 
-async def drop_table(table: str):
+async def drop_table(database: str, table: str):
     """
     Drops a table from the database.
     - database: String corresponding to the database to operate on.
@@ -43,7 +43,9 @@ async def drop_table(table: str):
                 return False
 
 
-async def insert(table: str, values: tuple or str, replacements: tuple = None):
+async def insert(
+    database: str, table: str, values: tuple or str, replacements: tuple = None
+):
     """
     Inserts values into a table.
     - database: String corresponding to the database to operate on.
@@ -57,7 +59,7 @@ async def insert(table: str, values: tuple or str, replacements: tuple = None):
             await conn.commit()
 
 
-async def remove(table: str, exp: str):
+async def remove(database: str, table: str, exp: str):
     """
     Removes values from a table.
     - database: String corresponding to the database to operate on.
@@ -70,7 +72,7 @@ async def remove(table: str, exp: str):
             await conn.commit()
 
 
-async def update(table: str, exp: str):
+async def update(database: str, table: str, exp: str):
     """
     Updates value in the table.
     - database: String corresponding to the database to operate on.
@@ -83,7 +85,7 @@ async def update(table: str, exp: str):
             await conn.commit()
 
 
-async def query(query: str):
+async def query(database: str, query: str):
     """
     Queries from the database in read-only mode.
     - database: String corresponding to the database to operate on.
@@ -101,7 +103,7 @@ async def query(query: str):
             return result
 
 
-async def queryall(query: str):
+async def queryall(database: str, query: str):
     """
     Queries from the database in read-only mode.
     - database: String corresponding to the database to operate on.
