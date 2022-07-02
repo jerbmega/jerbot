@@ -1,6 +1,5 @@
 # This plugin handles automatic sending of messages in channels on a specific time.
 
-import asyncio
 import hikari
 import lightbulb
 from lightbulb.ext import tasks
