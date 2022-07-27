@@ -40,8 +40,6 @@ def load_plugin_configs(plugin: str, datastore: lightbulb.utils.data_store.DataS
 
 """
 TODO
-Blacklist functionality
-Eagle Eye
 Item functionality
 Levenshtein distance filtering (thefuzz + score?)
 Moderation utilities (most of these are probably retired in favor of slash commands)

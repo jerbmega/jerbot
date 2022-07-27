@@ -55,7 +55,12 @@ async def insert(
     """
     async with asqlite.connect(f"db/{database}.db") as conn:
         async with conn.cursor() as cursor:
-            await cursor.execute(f"INSERT INTO {table} VALUES {values}", replacements)
+            if replacements:
+                await cursor.execute(
+                    f"INSERT INTO {table} VALUES {values}", replacements
+                )
+            else:
+                await cursor.execute(f"INSERT INTO {table} VALUES {values}")
             await conn.commit()
 
 

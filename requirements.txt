@@ -1,6 +1,7 @@
 hikari
 hikari-lightbulb
 pyyaml
+asqlite
 sqlalchemy
 apscheduler
 wordninja
