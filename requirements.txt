@@ -1,5 +1,6 @@
 hikari
 hikari-lightbulb
+hikari-miru
 pyyaml
 asqlite
 sqlalchemy

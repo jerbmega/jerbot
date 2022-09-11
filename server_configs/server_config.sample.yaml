@@ -14,7 +14,7 @@ automessage:
 modlogs:
   message_edits:
       channel:  YOUR_CHANNEL_ID_HERE
-      color:    0xffffff #Any hex color code is accepted.
+      color:    0xffffff # Any hex color code is accepted.
   message_deletes:
       channel:  YOUR_CHANNEL_ID_HERE
       color:    0xffffff
@@ -37,3 +37,18 @@ blacklist:
   dm_color:     0xffffff
   log_color:    0xffffff
   channel:  YOUR_CHANNEL_ID_HERE
+
+# This configures the watchlist functionality.
+watchlist:
+  # Put the ID of roles that should be authorized to use this command.
+  roles:
+  - 273609538731638784
+  log_color: 0xffffff
+  channel: YOUR_CHANNEL_ID_HERE
+
+# This configures public roles. 
+# Put the ID of any roles you want to be made available here.
+# These MUST BE UNDER the bot on the role heirarchy or this will not work.
+public_roles:
+  - "YOUR_BLACKLISTED_WORD_HERE"
+  - "YOUR_SECOND_BLACKLISTED_WORD_HERE"

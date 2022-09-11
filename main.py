@@ -1,4 +1,5 @@
 import hikari
+import miru
 import lightbulb
 import yaml
 import os
@@ -16,11 +17,11 @@ if __name__ == "__main__":
 
     bot = lightbulb.BotApp(
         token=config["token"],
-        default_enabled_guilds=(config["testing_guild"]),
         intents=intents,
-    )  # TODO remove enabled guilds for production
+    )
     bot.d = load_config()
     bot.load_extensions_from("plugins")
+    miru.load(bot)
     bot.run()
 
 
@@ -40,10 +41,9 @@ def load_plugin_configs(plugin: str, datastore: lightbulb.utils.data_store.DataS
 
 """
 TODO
-Item functionality
+Message log functionality
 Moderation utilities (most of these are probably retired in favor of slash commands)
 Probation functionality
-Role join/leave system
 Strikes
 """
 
