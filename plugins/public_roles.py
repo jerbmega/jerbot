@@ -89,14 +89,12 @@ async def leave(ctx: lightbulb.Context) -> None:
     if len(view.children) == 0:
         raise NoPublicRolesException()
 
-    message = await (
-        await ctx.respond(
-            "Choose a role to leave.",
-            components=view.build(),
-            flags=hikari.MessageFlag.EPHEMERAL,
-        )
+    message = await ctx.respond(
+        "Choose a role to leave.",
+        components=view.build(),
+        flags=hikari.MessageFlag.EPHEMERAL,
     )
-    view.start(message)
+    view.start(await message)
     await view.wait()
 
     if hasattr(view, "success"):
