@@ -13,7 +13,15 @@ from unidecode import unidecode
 
 import main
 
-plugin = lightbulb.Plugin("Blacklist", include_datastore=True)
+
+def get_enabled_guilds():
+    main.load_plugin_configs("blacklist", plugin.d)
+    return tuple(plugin.d["config"].keys())
+
+
+plugin = lightbulb.Plugin(
+    "Blacklist", include_datastore=True, default_enabled_guilds=get_enabled_guilds
+)
 plugin.add_checks(lightbulb.human_only)
 
 
@@ -101,7 +109,6 @@ async def on_message_update(event: hikari.GuildMessageUpdateEvent) -> None:
 
 def load(bot):
     bot.add_plugin(plugin)
-    main.load_plugin_configs("blacklist", plugin.d)
 
 
 def unload(bot):

@@ -9,6 +9,11 @@ import db
 import main
 
 
+def get_enabled_guilds():
+    main.load_plugin_configs("watchlist", plugin.d)
+    return tuple(plugin.d["config"].keys())
+
+
 @lightbulb.Check
 def check_authorized(context: lightbulb.Context) -> bool:
     return any(
@@ -17,7 +22,9 @@ def check_authorized(context: lightbulb.Context) -> bool:
     )
 
 
-plugin = lightbulb.Plugin("Watchlist", include_datastore=True)
+plugin = lightbulb.Plugin(
+    "Watchlist", include_datastore=True, default_enabled_guilds=get_enabled_guilds()
+)
 plugin.add_checks(lightbulb.human_only, check_authorized)
 
 
@@ -149,7 +156,6 @@ async def on_message_update(event: hikari.GuildMessageUpdateEvent) -> None:
 
 def load(bot):
     bot.add_plugin(plugin)
-    main.load_plugin_configs("watchlist", plugin.d)
     for guild in plugin.d["config"]:
         asyncio.run(
             db.create_table("watchlist", f"guild_{guild}", ("id", "reason"))
