@@ -5,8 +5,8 @@ import lightbulb
 import asyncio
 from datetime import datetime
 
-import db
 import main
+import db
 
 
 def get_enabled_guilds():
@@ -22,16 +22,14 @@ def check_authorized(context: lightbulb.Context) -> bool:
     )
 
 
-plugin = lightbulb.Plugin(
-    "Watchlist", include_datastore=True, default_enabled_guilds=get_enabled_guilds()
-)
+plugin = lightbulb.Plugin("Watchlist", include_datastore=True)
 plugin.add_checks(lightbulb.human_only, check_authorized)
 
 
 @plugin.command
 @lightbulb.option("reason", "Reason for adding user to the watchlist")
 @lightbulb.option("user", "User to watch", hikari.User)
-@lightbulb.command("watch", "Add a user to the watchlist")
+@lightbulb.command("watch", "Add a user to the watchlist", guilds=get_enabled_guilds())
 @lightbulb.implements(lightbulb.SlashCommand)
 async def watch(ctx: lightbulb.Context) -> None:
     await db.insert(
@@ -46,7 +44,9 @@ async def watch(ctx: lightbulb.Context) -> None:
 @lightbulb.option(
     "user", "User to remove", hikari.User
 )  # there is no way of getting a list of people in the db cleanly here because we have multiple guilds :(
-@lightbulb.command("unwatch", "Remove a user from the watchlist")
+@lightbulb.command(
+    "unwatch", "Remove a user from the watchlist", guilds=get_enabled_guilds()
+)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def unwatch(ctx: lightbulb.Context) -> None:
     await db.remove("watchlist", f"guild_{ctx.guild_id}", f"id = {ctx.options.user.id}")
