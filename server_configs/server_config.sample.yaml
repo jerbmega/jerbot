@@ -36,4 +36,4 @@ blacklist:
   - "YOUR_SECOND_BLACKLISTED_WORD_HERE"
   dm_color:     0xffffff
   log_color:    0xffffff
-  log_channel:  YOUR_CHANNEL_ID_HERE
+  channel:  YOUR_CHANNEL_ID_HERE

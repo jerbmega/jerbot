@@ -64,7 +64,7 @@ async def check_blacklist(event: hikari.Event):
     if await is_blacklisted(event.message):
         await event.message.delete()
         await event.author.send(
-            "Your recent message has tripped the word filter and has been deleted. Details are as follows.",
+            "Your recent message has tripped the word filter and has been deleted. \nIf you believe this was done in error, contact the moderation team in the server below for more information.",
             embed=await dm_embed(content=event.content, guild_id=event.guild_id),
         )
         await plugin.bot.cache.get_guild_channel(
