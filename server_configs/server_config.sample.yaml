@@ -52,3 +52,8 @@ watchlist:
 public_roles:
   - "YOUR_BLACKLISTED_WORD_HERE"
   - "YOUR_SECOND_BLACKLISTED_WORD_HERE"
+
+# This enables message logging.
+# If your Jerbot instance is verified, this WILL NOT WORK, as verified bots are barred from the message intent.
+logs:
+  true # This can be anything, really.

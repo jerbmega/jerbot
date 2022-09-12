@@ -41,7 +41,6 @@ def load_plugin_configs(plugin: str, datastore: lightbulb.utils.data_store.DataS
 
 """
 TODO
-Message log functionality
 Moderation utilities (most of these are probably retired in favor of slash commands)
 Probation functionality
 Strikes
