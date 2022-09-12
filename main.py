@@ -20,7 +20,8 @@ if __name__ == "__main__":
         intents=intents,
     )
     bot.d = load_config()
-    bot.load_extensions_from("plugins")
+    for folder in bot.d["plugin_folders"]:
+        bot.load_extensions_from(folder)
     miru.load(bot)
     bot.run()
 
@@ -49,6 +50,6 @@ Strikes
 """
 TODO Book of Secrets submodule
 Item functionality
-Platinum God parsing
-Wiki parsing
+Platinum God parsing (can we replace this with more accurate hand-written descriptions?)
+Wiki parsing (https://pypi.org/project/fandom-py/ is probably perfect for this as opposed to manually scraping)
 """

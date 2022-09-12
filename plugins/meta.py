@@ -4,6 +4,7 @@ import hikari
 import lightbulb
 
 import os
+import main
 
 plugin = lightbulb.Plugin("Meta")
 plugin.add_checks(lightbulb.owner_only)
@@ -14,9 +15,12 @@ def find_plugins(safe: bool = False):
     blacklist = ["__pycache__"]
     if safe:  # Prevent critical modules (like this one!) from being unloaded
         blacklist.append("meta.py")
-    for plugin in os.listdir("plugins"):
-        if plugin not in blacklist:
-            plugins.append(plugin.split(".")[0])
+    for folder in main.load_config()[
+        "plugin_folders"
+    ]:  # This runs too early to properly get this from the datastore
+        for plugin in os.listdir(folder):
+            if plugin not in blacklist:
+                plugins.append(f"{folder}.{plugin.split('.')[0]}")
     return plugins
 
 
@@ -25,7 +29,7 @@ def find_plugins(safe: bool = False):
 @lightbulb.command("reload", "Reload a plugin")
 @lightbulb.implements(lightbulb.SlashCommand)
 async def reload(ctx: lightbulb.Context) -> None:
-    ctx.bot.reload_extensions(f"plugins.{ctx.options.plugin}")
+    ctx.bot.reload_extensions(ctx.options.plugin)
     await ctx.respond(
         f"Reloaded {ctx.options.plugin}.", flags=hikari.MessageFlag.EPHEMERAL
     )
@@ -36,7 +40,7 @@ async def reload(ctx: lightbulb.Context) -> None:
 @lightbulb.command("unload", "Unload a plugin")
 @lightbulb.implements(lightbulb.SlashCommand)
 async def unload(ctx: lightbulb.Context) -> None:
-    ctx.bot.unload_extensions(f"plugins.{ctx.options.plugin}")
+    ctx.bot.unload_extensions(ctx.options.plugin)
     await ctx.respond(
         f"Unloaded {ctx.options.plugin}.", flags=hikari.MessageFlag.EPHEMERAL
     )
@@ -47,7 +51,7 @@ async def unload(ctx: lightbulb.Context) -> None:
 @lightbulb.command("load", "Load a plugin")
 @lightbulb.implements(lightbulb.SlashCommand)
 async def load(ctx: lightbulb.Context) -> None:
-    ctx.bot.load_extensions(f"plugins.{ctx.options.plugin}")
+    ctx.bot.load_extensions(ctx.options.plugin)
     await ctx.respond(
         f"Loaded {ctx.options.plugin}.", flags=hikari.MessageFlag.EPHEMERAL
     )
