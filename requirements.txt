@@ -6,5 +6,5 @@ asqlite
 sqlalchemy
 apscheduler
 wordninja
-unidecode
+decancer-py
 git+https://github.com/Rapptz/asqlite

@@ -9,7 +9,7 @@ from thefuzz import utils
 from thefuzz.fuzz import token_sort_ratio
 from thefuzz.process import extractOne
 from datetime import datetime
-from unidecode import unidecode
+import decancer_py as decancer
 
 import main
 
@@ -45,9 +45,14 @@ async def dm_embed(content: str = None, guild_id: int = None):
 
 
 async def is_blacklisted(message: hikari.Message):
-    # Perform preliminary filtration with unidecode, remove whitespace from the entire sentence, reconstruct it into words with wordninja
+    # Perform preliminary filtration with decancer, remove whitespace from the entire sentence, reconstruct it into words with wordninja
     # This avoids any attempts to dodge the filter via whitespace or unicode variation
-    content = re.sub(r"[^a-zA-Z0-9]", "", unidecode(message.content), flags=re.UNICODE)
+    content = re.sub(
+        r"[^a-zA-Z0-9]",
+        "",
+        decancer.parse(message.content),
+        flags=re.UNICODE,
+    )
     content = wordninja.split(content)
     for word in content:
         if utils.full_process(word):
