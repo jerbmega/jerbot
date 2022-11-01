@@ -3,6 +3,7 @@ import miru
 import lightbulb
 import yaml
 import os
+import datetime
 
 
 def load_config():
@@ -14,12 +15,13 @@ def load_config():
 if __name__ == "__main__":
     intents = hikari.Intents.ALL_UNPRIVILEGED | hikari.Intents.GUILD_MEMBERS
     config = load_config()
-
     bot = lightbulb.BotApp(
         token=config["token"],
         intents=intents,
     )
+
     bot.d = load_config()
+    bot.d["start_time"] = datetime.datetime.now()
     for folder in bot.d["plugin_folders"]:
         bot.load_extensions_from(folder)
     miru.load(bot)

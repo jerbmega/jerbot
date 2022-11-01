@@ -1,4 +1,5 @@
 import asqlite
+import os
 
 
 async def create_table(database: str, table: str, keys: tuple):
@@ -24,6 +25,17 @@ async def create_table(database: str, table: str, keys: tuple):
             if not does_exist:
                 await cursor.execute(f"CREATE TABLE {table} {keys}")
                 await conn.commit()
+
+
+async def del_table(database: str):
+    """
+    Delete a table
+    - database: String corresponding to the database to delete.
+    """
+    try:
+        os.remove(f"db/{database}.db")
+    except FileNotFoundError:
+        pass
 
 
 async def drop_table(database: str, table: str):

@@ -57,3 +57,7 @@ public_roles:
 # If your Jerbot instance is verified, this WILL NOT WORK, as verified bots are barred from the message intent.
 logs:
   true # This can be anything, really.
+
+# This enables moderation utilities (unban and purge).
+modutil:
+  true

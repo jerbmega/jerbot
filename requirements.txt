@@ -7,4 +7,6 @@ sqlalchemy
 apscheduler
 wordninja
 decancer-py
+thefuzz
+python-Levenshtein
 git+https://github.com/Rapptz/asqlite
