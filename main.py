@@ -13,7 +13,7 @@ def load_config():
 
 
 if __name__ == "__main__":
-    intents = hikari.Intents.ALL_UNPRIVILEGED | hikari.Intents.GUILD_MEMBERS
+    intents = hikari.Intents.ALL_UNPRIVILEGED | hikari.Intents.GUILD_MEMBERS | hikari.Intents.MESSAGE_CONTENT,
     config = load_config()
     bot = lightbulb.BotApp(
         token=config["token"],
@@ -44,7 +44,7 @@ def load_plugin_configs(plugin: str, datastore: lightbulb.utils.data_store.DataS
 
 """
 TODO
-Moderation utilities (most of these are probably retired in favor of slash commands)
+AEGIS (global ban / announcements)
 Probation functionality
 Strikes
 """
