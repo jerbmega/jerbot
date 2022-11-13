@@ -8,6 +8,7 @@ import re
 
 import main
 import db
+import err
 
 
 def get_enabled_guilds():
@@ -44,12 +45,10 @@ async def global_ban(ctx: lightbulb.Context) -> None:
             async with session.get(ctx.options.users) as response:
                 response = await response.text()
                 if re.search("[a-zA-Z]", response):
-                    await ctx.respond("The provided URL must only have numeric ID's.")
-                    return
+                    raise err.NonAlphanumericGlobalBanException
                 users = response.split(" ")
     except aiohttp.client_exceptions.InvalidURL:
-        await ctx.respond("The provided URL is incorrect or couldn't be reached.")
-        return
+        raise err.InvalidGlobalBanURL
 
     await ctx.respond(
         f"Processing {len(users)} users across {len(elegible_guilds)} servers. Buckle up... this is gonna take a while.",

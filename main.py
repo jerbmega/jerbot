@@ -5,6 +5,8 @@ import yaml
 import os
 import datetime
 
+import err
+
 
 def load_config():
     with open("config.yaml") as cfg:
@@ -23,6 +25,47 @@ if __name__ == "__main__":
         token=config["token"],
         intents=intents,
     )
+
+    @bot.listen(lightbulb.CommandErrorEvent)
+    async def on_error(event: lightbulb.CommandErrorEvent) -> None:
+
+        exception = event.exception.__cause__ or event.exception
+        exceptions = [
+            # General
+            {
+                "exception": lightbulb.NotOwner,
+                "response": "Only the owner of the bot can do that.",
+            },
+            {
+                "exception": lightbulb.MissingRequiredPermission,
+                "response": "You have insufficient permissions to run this command.",
+            },
+            # Public roles
+            {
+                "exception": err.NoPublicRoles,
+                "response": "You don't have any public roles!",
+            },
+            # AEGIS
+            {
+                "exception": err.NonAlphanumericGlobalBan,
+                "response": "The provided URL must only have numeric ID's.",
+            },
+            {
+                "exception": err.InvalidGlobalBanURL,
+                "response": "The provided URL is incorrect or couldn't be reached.",
+            },
+        ]
+        for response in exceptions:
+            if isinstance(exception, response["exception"]):
+                await event.context.respond(
+                    response["response"], flags=hikari.MessageFlag.EPHEMERAL
+                )
+                return
+
+        await event.context.respond(
+            f"An unknown error occured trying to run `{event.context.command.name}`.\n `{exception.__class__}`: {exception}",
+            flags=hikari.MessageFlag.EPHEMERAL,
+        )
 
     bot.d = load_config()
     bot.d["start_time"] = datetime.datetime.now()

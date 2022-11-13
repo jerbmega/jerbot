@@ -5,6 +5,7 @@ import lightbulb
 import miru
 
 import main
+import err
 
 
 def get_enabled_guilds():
@@ -13,10 +14,6 @@ def get_enabled_guilds():
 
 
 plugin = lightbulb.Plugin("Public Roles", include_datastore=True)
-
-
-class NoPublicRolesException(Exception):
-    pass
 
 
 class AddRoleButton(miru.Button):
@@ -87,7 +84,7 @@ async def leave(ctx: lightbulb.Context) -> None:
             view.add_item(button)
 
     if len(view.children) == 0:
-        raise NoPublicRolesException()
+        raise err.NoPublicRoles
 
     message = await ctx.respond(
         "Choose a role to leave.",
@@ -103,19 +100,6 @@ async def leave(ctx: lightbulb.Context) -> None:
         )
     else:
         await ctx.edit_last_response("You didn't respond in time!", components=None)
-
-
-@plugin.set_error_handler()
-async def command_error_handler(event: lightbulb.CommandErrorEvent) -> bool:
-    exception = event.exception.__cause__ or event.exception
-    if isinstance(exception, NoPublicRolesException):
-        response = "You don't have any public roles!"
-    else:
-        response = (
-            f"An unknown error occured trying to perform this action: {exception}"
-        )
-
-    await event.context.respond(response, flags=hikari.MessageFlag.EPHEMERAL)
 
 
 def load(bot):

@@ -57,13 +57,6 @@ async def load(ctx: lightbulb.Context) -> None:
     )
 
 
-@plugin.set_error_handler()
-async def command_error_handler(event: lightbulb.CommandErrorEvent) -> bool:
-    exception = event.exception.__cause__ or event.exception
-    response = f"An unknown error occured trying to perform this action: {exception}"
-    await event.context.respond(response, flags=hikari.MessageFlag.EPHEMERAL)
-
-
 def load(bot):
     bot.add_plugin(plugin)
 
