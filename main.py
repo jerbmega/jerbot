@@ -48,7 +48,6 @@ def load_plugin_configs(plugin: str, datastore: lightbulb.utils.data_store.DataS
 
 """
 TODO
-AEGIS (global ban / announcements)
 Probation functionality
 Strikes
 """

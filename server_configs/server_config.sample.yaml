@@ -53,7 +53,8 @@ public_roles:
   - "YOUR_BLACKLISTED_WORD_HERE"
   - "YOUR_SECOND_BLACKLISTED_WORD_HERE"
 
-# This enables message logging.
+# This allows the owner of the deployed Jerbot instance to log all messages on the server for moderation purpose.
+# You NEED to trust the bot owner for this- this can be used maliciously in the wrong hands.
 # If your Jerbot instance is verified, this WILL NOT WORK, as verified bots are barred from the message intent.
 logs:
   true # This can be anything, really.
@@ -61,3 +62,14 @@ logs:
 # This enables moderation utilities (unban and purge).
 modutil:
   true
+
+# This allows the owner of the deployed Jerbot instance to ban users from your server, in the event of an identified ongoing botnet or raid.
+# This also lets the owner of the deployed Jerbot instance send announcements to a designated announcement channel.
+# You NEED to trust the bot owner for this- this can be used maliciously in the wrong hands.
+aegis:
+  global_ban: true # As usual, just omit this if not desired.
+  announcements:
+    channel: YOUR_CHANNEL_ID_HERE 
+
+
+  

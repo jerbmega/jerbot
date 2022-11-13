@@ -9,4 +9,5 @@ wordninja
 decancer-py
 thefuzz
 python-Levenshtein
+aiohttp
 git+https://github.com/Rapptz/asqlite

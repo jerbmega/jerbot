@@ -1,7 +1,3 @@
-"""
-unban, purge, announce, global_ban
-"""
-
 # This plugin handles extra moderation commands.
 
 import asyncio
