@@ -23,19 +23,21 @@ plugin = lightbulb.Plugin("Mod Util", include_datastore=True)
 
 @plugin.command
 @lightbulb.add_checks(lightbulb.has_guild_permissions(hikari.Permissions.BAN_MEMBERS))
-@lightbulb.option("reason", "Reason the user is being unbanned", str, required=False)
+@lightbulb.option(
+    "reason", "Reason the user is being unbanned", str, required=False, default=""
+)
 @lightbulb.option(
     "user", "ID and discriminator of user to unban", str, autocomplete=True
 )
 @lightbulb.command("unban", "Unban a user", guilds=get_enabled_guilds())
 @lightbulb.implements(lightbulb.SlashCommand)
 async def unban(ctx: lightbulb.Context) -> None:
-    print(ctx.options.user)
     await ctx.get_guild().unban(
         await db.query(
             "bancache",
             f'SELECT id FROM guild_{ctx.guild_id} WHERE searchable = "{ctx.options.user}"',
-        )
+        ),
+        reason=ctx.options.reason,
     )
     await ctx.respond("User has been unbanned.", flags=hikari.MessageFlag.EPHEMERAL)
 
@@ -56,7 +58,7 @@ async def unban_autocomplete(option, interaction):
     return await db.queryall(
         "bancache",
         (
-            f'SELECT searchable FROM guild_{interaction.guild_id} WHERE searchable LIKE "%{option.value}%" ORDER BY username ASC LIMIT 25'
+            f'SELECT searchable FROM guild_{interaction.guild_id} WHERE searchable LIKE "%{option.value}%" ORDER BY searchable ASC LIMIT 25'
         ),
     )
 
