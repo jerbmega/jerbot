@@ -13,7 +13,11 @@ def load_config():
 
 
 if __name__ == "__main__":
-    intents = hikari.Intents.ALL_UNPRIVILEGED | hikari.Intents.GUILD_MEMBERS | hikari.Intents.MESSAGE_CONTENT,
+    intents = (
+        hikari.Intents.ALL_UNPRIVILEGED
+        | hikari.Intents.GUILD_MEMBERS
+        | hikari.Intents.MESSAGE_CONTENT
+    )
     config = load_config()
     bot = lightbulb.BotApp(
         token=config["token"],
