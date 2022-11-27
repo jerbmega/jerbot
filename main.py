@@ -6,6 +6,7 @@ import os
 import datetime
 
 import err
+from scheduler import scheduler
 
 
 def load_config():
@@ -66,6 +67,10 @@ if __name__ == "__main__":
             f"An unknown error occured trying to run `{event.context.command.name}`.\n `{exception.__class__}`: {exception}",
             flags=hikari.MessageFlag.EPHEMERAL,
         )
+
+    #@bot.listen()
+    #async def start_scheduler(event: hikari.StartedEvent):
+    #    scheduler.start()
 
     bot.d = load_config()
     bot.d["start_time"] = datetime.datetime.now()
