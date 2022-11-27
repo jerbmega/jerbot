@@ -2,7 +2,7 @@ hikari
 hikari-lightbulb
 hikari-miru
 pyyaml
-asqlite
+aiosqlite
 sqlalchemy
 apscheduler
 wordninja
@@ -10,4 +10,3 @@ decancer-py
 thefuzz
 python-Levenshtein
 aiohttp
-git+https://github.com/Rapptz/asqlite

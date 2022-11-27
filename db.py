@@ -1,4 +1,4 @@
-import asqlite
+import aiosqlite
 import os
 
 
@@ -9,10 +9,10 @@ async def create_table(database: str, table: str, keys: tuple):
     - table: String corresponding to a table in the SQLite database.
     - keys: Tuple of keys for new table.
     """
-    async with asqlite.connect(f"db/{database}.db") as conn:
+    async with aiosqlite.connect(f"db/{database}.db") as conn:
         async with conn.cursor() as cursor:
             # Quick crash course:
-            # - We're using SQLite 3 via an async wrapper, asqlite
+            # - We're using SQLite 3 via an async wrapper, aiosqlite
             # - Parenthesis are needed to properly use these values because of the quirks associated with being async
             # - [0] is needed to get the actual result in this case
             does_exist = (
@@ -45,13 +45,13 @@ async def drop_table(database: str, table: str):
     - table: String corresponding to a table in the SQLite database.
     Returns True if table was successfully dropped.
     """
-    async with asqlite.connect(f"db/{database}.db") as conn:
+    async with aiosqlite.connect(f"db/{database}.db") as conn:
         async with conn.cursor() as cursor:
             try:
                 await cursor.execute(f"DROP TABLE {table}")
                 await conn.commit()
                 return True
-            except asqlite.OperationalError:
+            except aiosqlite.OperationalError:
                 return False
 
 
@@ -65,7 +65,7 @@ async def insert(
     - values: Tuple of values to insert into the table.
     - replacements: Optional tuple. Used if values specified are for replacement for advanced operations.
     """
-    async with asqlite.connect(f"db/{database}.db") as conn:
+    async with aiosqlite.connect(f"db/{database}.db") as conn:
         async with conn.cursor() as cursor:
             if replacements:
                 await cursor.execute(
@@ -83,7 +83,7 @@ async def remove(database: str, table: str, exp: str):
     - table: String corresponding to a table in the SQLite database.
     - exp: Expression for deletion.
     """
-    async with asqlite.connect(f"db/{database}.db") as conn:
+    async with aiosqlite.connect(f"db/{database}.db") as conn:
         async with conn.cursor() as cursor:
             await cursor.execute(f"DELETE FROM {table} WHERE {exp}")
             await conn.commit()
@@ -96,7 +96,7 @@ async def update(database: str, table: str, exp: str):
     - table: String corresponding to a table in the SQLite database.
     - exp: Expression for updating.
     """
-    async with asqlite.connect(f"db/{database}.db") as conn:
+    async with aiosqlite.connect(f"db/{database}.db") as conn:
         async with conn.cursor() as cursor:
             await cursor.execute(f"UPDATE {table} SET {exp}")
             await conn.commit()
@@ -109,7 +109,7 @@ async def query(database: str, query: str):
     - query: String containing the query for the database.
     Returns query as a tuple if multiple variables were queried, or raw query otherwise
     """
-    async with asqlite.connect(f"file:./db/{database}.db?mode=ro", uri=True) as conn:
+    async with aiosqlite.connect(f"file:./db/{database}.db?mode=ro", uri=True) as conn:
         async with conn.cursor() as cursor:
             result = await (await cursor.execute(query)).fetchone()
             if not result:
@@ -127,7 +127,7 @@ async def queryall(database: str, query: str):
     - query: String containing the query for the database.
     Returns a list of matching queries as tuples if multiple variables were queried, or raw list of matching queries otherwise
     """
-    async with asqlite.connect(f"file:./db/{database}.db?mode=ro", uri=True) as conn:
+    async with aiosqlite.connect(f"file:./db/{database}.db?mode=ro", uri=True) as conn:
         async with conn.cursor() as cursor:
             result = await (await cursor.execute(query)).fetchall()
             if not result:
