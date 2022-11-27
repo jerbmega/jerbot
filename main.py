@@ -68,9 +68,9 @@ if __name__ == "__main__":
             flags=hikari.MessageFlag.EPHEMERAL,
         )
 
-    #@bot.listen()
-    #async def start_scheduler(event: hikari.StartedEvent):
-    #    scheduler.start()
+    @bot.listen()
+    async def start_scheduler(event: hikari.StartedEvent):
+        scheduler.start()
 
     bot.d = load_config()
     bot.d["start_time"] = datetime.datetime.now()
