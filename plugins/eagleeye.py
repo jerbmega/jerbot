@@ -53,6 +53,35 @@ async def unwatch(ctx: lightbulb.Context) -> None:
     await ctx.respond(f"`{ctx.options.user.username}` removed from the watchlist.")
 
 
+@plugin.command
+@lightbulb.command("watchlist", "List watched users", guilds=get_enabled_guilds())
+@lightbulb.implements(lightbulb.SlashCommand)
+async def watchlist(ctx: lightbulb.Context) -> None:
+    users = await db.queryall("watchlist", f"select id from guild_{ctx.guild_id}")
+    await ctx.respond(
+        f"I have eyes on `{', '.join([ctx.get_guild().get_member(user).username for user in users])}`"
+    )
+
+
+@plugin.command
+@lightbulb.command(
+    "watch_purge",
+    "Remove any users not in the server from the watchlist",
+    guilds=get_enabled_guilds(),
+)
+@lightbulb.implements(lightbulb.SlashCommand)
+async def watchlist(ctx: lightbulb.Context) -> None:
+    users = await db.queryall("watchlist", f"select id from guild_{ctx.guild_id}")
+    num_users = len(users)
+    for user in users:
+        if not ctx.get_guild().get_member(user):
+            await db.remove("watchlist", f"guild_{ctx.guild_id}", f"id = {user}")
+    del_users = num_users - len(
+        await db.queryall("watchlist", f"select id from guild_{ctx.guild_id}")
+    )
+    await ctx.respond(f"Done! Removed {num_users - del_users} users.")
+
+
 async def watchlist_embed(
     message: hikari.Message = None,
     guild_id: int = None,
@@ -89,20 +118,6 @@ async def watchlist_embed_edit(
     embed.add_field(name="Old message", value=old_message.content, inline=True)
     embed.add_field(name="New message", value=message.content, inline=True)
     return embed
-
-
-"""
-            fields = [['Message content', message.content]]
-            for attachment in message.attachments:
-                fields.append(['Attachment', attachment.proxy_url])
-
-            await write_embed(server['eagleeye']['channel'], message.author, server['eagleeye']['embed_color'],
-                              f'{message.author.name} ({message.author.id})',
-                              description=f'[#{message.channel.name}]'
-                                          f'(https://discordapp.com/channels/{message.guild.id}/{message.channel.id}'
-                                          f'/{message.id})',
-                              fields=fields)
-                              """
 
 
 @plugin.listener(hikari.GuildMessageCreateEvent)
