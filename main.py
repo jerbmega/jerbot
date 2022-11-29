@@ -4,6 +4,7 @@ import lightbulb
 import yaml
 import os
 import datetime
+import traceback
 
 import err
 from scheduler import scheduler
@@ -64,7 +65,7 @@ if __name__ == "__main__":
                 return
 
         await event.context.respond(
-            f"An unknown error occured trying to run `{event.context.command.name}`.\n `{exception.__class__}`: {exception}",
+            f"An unknown error occured trying to run `{event.context.command.name}`.\n ```{' '.join(traceback.format_exception(exception))}```",
             flags=hikari.MessageFlag.EPHEMERAL,
         )
 
