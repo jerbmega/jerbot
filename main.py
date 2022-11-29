@@ -56,6 +56,11 @@ if __name__ == "__main__":
                 "exception": err.InvalidGlobalBanURL,
                 "response": "The provided URL is incorrect or couldn't be reached.",
             },
+            # Probations
+            {
+                "exception": err.UserNotInProbation,
+                "response": "This user isn't in probation!",
+            },
         ]
         for response in exceptions:
             if isinstance(exception, response["exception"]):
@@ -97,7 +102,6 @@ def load_plugin_configs(plugin: str, datastore: lightbulb.utils.data_store.DataS
 
 """
 TODO
-Probation functionality
 Strikes
 """
 

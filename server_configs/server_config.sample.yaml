@@ -71,5 +71,20 @@ aegis:
   announcements:
     channel: YOUR_CHANNEL_ID_HERE 
 
-
-  
+# This configures probations and strikes.
+probate:
+  # Put the ID of any roles you want to be able to manage and see probation channels.
+  allowed_roles:
+  - YOUR_ROLE_ID_HERE
+  # Put the ID of the role to give to users in probation.
+  probation_role: YOUR_ROLE_ID_HERE
+  # This is the contents of a message that will be posted in a newly created probation channel.
+  info_message: "YOUR_MESSAGE_HERE"
+  # This is the contents of a DM that will be sent to a user when probated.
+  # You can add %time% into the string and it will be replaced with the time the user will be let out of probation.
+  # Ex: "You'll be here until %time%" -> "You'll be here until 2022/11/22 04:23:56"
+  probation_message: "YOUR_MESSAGE_HERE"
+  # This is the contents of a DM that will be sent to a user when striked.
+  # The same %time% replacement applies, but you can also use %num_strikes% to show the number of strikes.
+  # Ex: "You have %num_strikes% strikes" -> "You have 2 strikes"
+  strike_message: "YOUR_MESSAGE_HERE"

@@ -8,3 +8,7 @@ class NonAlphanumericGlobalBan(Exception):
 
 class InvalidGlobalBanURL(Exception):
     pass
+
+
+class UserNotInProbation(Exception):
+    pass
