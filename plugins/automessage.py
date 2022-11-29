@@ -30,6 +30,7 @@ def load(bot):
                     task["channel"],
                     task["message"],
                 ),
+                misfire_grace_time=10,
             )
             plugin.d["tasks"].append(task)
 
