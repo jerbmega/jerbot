@@ -23,7 +23,7 @@ async def create_table(database: str, table: str, keys: tuple):
                 ).fetchone()
             )[0]
             if not does_exist:
-                await cursor.execute(f"CREATE TABLE {table} {keys}")
+                await cursor.execute(f"CREATE TABLE IF NOT EXISTS {table} {keys}")
                 await conn.commit()
 
 
