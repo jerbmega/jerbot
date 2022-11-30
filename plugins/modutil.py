@@ -76,7 +76,7 @@ async def on_member_banned(event: hikari.BanCreateEvent) -> None:
     if event.guild_id in plugin.d["config"]:
         await db.insert(
             "bancache",
-            f"guild_{guild}",
+            f"guild_{event.guild}",
             (ban.user.id, f"{ban.user.username}#{ban.user.discriminator}"),
         )
 
