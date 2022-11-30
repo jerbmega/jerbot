@@ -15,16 +15,8 @@ async def create_table(database: str, table: str, keys: tuple):
             # - We're using SQLite 3 via an async wrapper, aiosqlite
             # - Parenthesis are needed to properly use these values because of the quirks associated with being async
             # - [0] is needed to get the actual result in this case
-            does_exist = (
-                await (
-                    await cursor.execute(
-                        f"SELECT count(name) FROM sqlite_master WHERE type='table' AND name='{table}'"
-                    )
-                ).fetchone()
-            )[0]
-            if not does_exist:
-                await cursor.execute(f"CREATE TABLE IF NOT EXISTS {table} {keys}")
-                await conn.commit()
+            await cursor.execute(f"CREATE TABLE IF NOT EXISTS {table} {keys}")
+            await conn.commit()
 
 
 async def del_table(database: str):
@@ -53,6 +45,26 @@ async def drop_table(database: str, table: str):
                 return True
             except aiosqlite.OperationalError:
                 return False
+
+
+async def query_table(database: str, table: str):
+    """
+    Checks if
+    - database: String corresponding to the database to operate on.
+    - table: String corresponding to a table in the SQLite database.
+    Returns True if the table exists
+    """
+    async with aiosqlite.connect(f"db/{database}.db") as conn:
+        async with conn.cursor() as cursor:
+            if (
+                await (
+                    await cursor.execute(
+                        f"SELECT count(name) FROM sqlite_master WHERE type='table' AND name='{table}'"
+                    )
+                ).fetchone()
+            )[0]:
+                return True
+            return False
 
 
 async def insert(
