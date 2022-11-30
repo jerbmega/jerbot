@@ -34,7 +34,7 @@ async def on_message_create(event: hikari.GuildMessageCreateEvent) -> None:
     await log_message(event)
 
 
-@plugin.listener(hikari.GuildMessageCreateEvent)
+@plugin.listener(hikari.GuildMessageUpdateEvent)
 async def on_message_update(event: hikari.GuildMessageUpdateEvent) -> None:
     await log_message(event)
 
