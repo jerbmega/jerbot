@@ -3,6 +3,7 @@
 import hikari
 import lightbulb
 import asyncio
+import os
 from datetime import datetime, timedelta
 from apscheduler.triggers.date import DateTrigger
 
@@ -40,6 +41,29 @@ def find_channel(guild: hikari.Guild, type: hikari.ChannelType, name: str):
     for channel in guild.get_channels().values():
         if channel.type == type and channel.name == name:
             return channel
+
+
+async def log_embed(
+    user: str = None,
+    desc: str = None,
+    event: str = None,
+    color: str = None,
+    footer: str = None,
+    fields: list = [],
+):
+    embed = hikari.embeds.Embed(
+        title=f"{user.username}#{user.discriminator}",
+        description=desc,
+        color=color,
+        timestamp=datetime.now().astimezone(),
+    )
+    embed.set_author(name=event)
+    embed.set_footer(text=footer)
+    embed.set_thumbnail(user.avatar_url)
+
+    for field in fields:
+        embed.add_field(field["name"], field["value"], inline=True)
+    return embed
 
 
 async def probate_user(guild, user, reason, time):
@@ -99,12 +123,15 @@ async def probate_user(guild, user, reason, time):
             category=category,
             permission_overwrites=overwrites,
         )
-
-        await channel.send(content=plugin.d["config"][guild.id]["info_message"])
     elif reason:
         await channel.edit(
             topic=f"{user.mention}{(' - ' + reason)}",
         )
+    await db.insert("probate", f"probations_{guild.id}", (user.id, channel.id))
+    await db.create_table(
+        "probate", f"logs_{user.id}", ("author", "username", "content", "time")
+    )
+    await channel.send(content=plugin.d["config"][guild.id]["info_message"])
     test = scheduler.add_job(
         unprobate_user,
         DateTrigger(parse_time(time)),
@@ -135,6 +162,54 @@ async def unprobate_user(guild_id: int, user_id: int):
     ).send(  # highly doubt the cache will be populated on early load
         content=plugin.d["config"][guild_id]["unprobation_message"]
     )
+
+    await db.remove("probate", f"probations_{guild_id}", f"user_id = {user_id}")
+    if plugin.d["config"][guild_id]["log_channel"]:
+        with open(f"/tmp/logs_{user_id}.txt", "w+") as logs:  # TODO async this?
+            for message in await db.queryall(
+                "probate", f"select * from logs_{user_id}"
+            ):
+                logs.write(
+                    f"[{message[3]} UTC] <{message[1]} ({message[0]})> - {message[2]}\n"
+                )
+        await plugin.bot.cache.get_guild_channel(
+            plugin.d["config"][guild_id]["log_channel"]
+        ).send(
+            embed=await log_embed(
+                user=await plugin.bot.rest.fetch_user(user_id),
+                event="Probation expired.",
+                color=plugin.d["config"][guild_id]["log_color"],
+                fields=[
+                    {"name": "User ID", "value": user_id},
+                ],
+            ),
+            attachment=f"/tmp/logs_{user_id}.txt",
+        )
+    os.remove(f"/tmp/logs_{user_id}.txt")
+    await db.drop_table("probate", f"logs_{user_id}")
+
+
+async def log_message(event: hikari.Event):
+    if (
+        event.guild_id in plugin.d["config"]
+        and not event.message.content == hikari.UNDEFINED
+    ):
+        user_id = await db.query(
+            "probate",
+            f"select user_id from probations_{event.guild_id} where channel_id = {event.channel_id}",
+        )
+        if user_id:
+            await db.insert(
+                "probate",
+                f"logs_{user_id}",
+                "(?,?,?,?)",
+                (
+                    event.author_id,
+                    event.message.author.username,
+                    event.message.content,
+                    datetime.utcnow(),
+                ),
+            )
 
 
 @plugin.command
@@ -171,6 +246,26 @@ async def probate(ctx: lightbulb.Context) -> None:
             "%time%", timestamp_to_human(parse_time(ctx.options.time).timestamp())
         )
     )
+    if plugin.d["config"][ctx.guild_id]["log_channel"]:
+        await ctx.bot.cache.get_guild_channel(
+            plugin.d["config"][ctx.guild_id]["log_channel"]
+        ).send(
+            embed=await log_embed(
+                user=ctx.options.user,
+                event="User placed in probation.",
+                desc=f"**{ctx.author.username}#{ctx.author.discriminator}{(' - ' + ctx.options.reason) if ctx.options.reason else ''}**\nAn archive of the probation chat will be available once the probation expires.",
+                color=plugin.d["config"][ctx.guild_id]["log_color"],
+                fields=[
+                    {"name": "User ID", "value": ctx.options.user.id},
+                    {
+                        "name": "Scheduled Release Time",
+                        "value": timestamp_to_human(
+                            parse_time(ctx.options.time).timestamp()
+                        ),
+                    },
+                ],
+            ),
+        )
     await ctx.respond(
         f"Done. Scheduled release for {timestamp_to_human(parse_time(ctx.options.time).timestamp())}"
     )
@@ -191,7 +286,7 @@ async def probate(ctx: lightbulb.Context) -> None:
 async def unprobate(ctx: lightbulb.Context) -> None:
     if not await db.query(
         "probate",
-        f"select id from probations_{ctx.guild_id} where id = {ctx.options.user.id}",
+        f"select user_id from probations_{ctx.guild_id} where user_id = {ctx.options.user.id}",
     ):
         raise err.UserNotInProbation
     await unprobate_user(ctx.guild_id, ctx.options.user.id)
@@ -199,12 +294,22 @@ async def unprobate(ctx: lightbulb.Context) -> None:
     await ctx.respond("Done.")
 
 
+@plugin.listener(hikari.GuildMessageCreateEvent)
+async def on_message_create(event: hikari.GuildMessageCreateEvent) -> None:
+    await log_message(event)
+
+
+@plugin.listener(hikari.GuildMessageUpdateEvent)
+async def on_message_update(event: hikari.GuildMessageUpdateEvent) -> None:
+    await log_message(event)
+
+
 def load(bot):
     bot.add_plugin(plugin)
     plugin.d["bot"] = bot
     for guild in plugin.d["config"]:
         asyncio.run(
-            db.create_table("probate", f"probations_{guild}", ("id", "reason", "logs"))
+            db.create_table("probate", f"probations_{guild}", ("user_id", "channel_id"))
         )
         asyncio.run(db.create_table("probate", f"strikes_{guild}", ("id", "reason")))
 
