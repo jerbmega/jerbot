@@ -19,6 +19,7 @@ async def log_message(event: hikari.Event):
         await db.insert(
             "logs",
             f"guild_{event.guild_id}",
+            "(?,?,?,?,?)",
             (
                 event.message_id,
                 event.author_id,
