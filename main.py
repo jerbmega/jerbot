@@ -42,6 +42,10 @@ if __name__ == "__main__":
                 "exception": lightbulb.MissingRequiredPermission,
                 "response": "You have insufficient permissions to run this command.",
             },
+            {
+                "exception": lightbulb.CheckFailure,
+                "response": "You have insufficient permissions to run this command.",
+            },
             # Public roles
             {
                 "exception": err.NoPublicRoles,
@@ -60,6 +64,10 @@ if __name__ == "__main__":
             {
                 "exception": err.UserNotInProbation,
                 "response": "This user isn't in probation!",
+            },
+            {
+                "exception": err.UnstrikeableRole,
+                "response": "Users that can manage strikes can't be striked.",
             },
         ]
         for response in exceptions:

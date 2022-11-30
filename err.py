@@ -12,3 +12,7 @@ class InvalidGlobalBanURL(Exception):
 
 class UserNotInProbation(Exception):
     pass
+
+
+class UnstrikeableRole(Exception):
+    pass

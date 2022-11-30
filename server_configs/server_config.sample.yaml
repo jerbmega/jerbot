@@ -73,25 +73,29 @@ aegis:
 
 # This configures probations and strikes.
 probate:
-  # Put the ID of any roles you want to be able to manage and see probation channels.
+  # Put the ID of any roles you want to be able to manage probations/strikes and see probation channels.
   allowed_roles:
   - YOUR_ROLE_ID_HERE
   # Put the ID of the role to give to users in probation.
-  probation_role: YOUR_ROLE_ID_HERE
+  probation_role:       YOUR_ROLE_ID_HERE
   # This is the ID of a channel that will have logs of the probation channel uploaded to it.
-  log_channel: YOUR_CHANNEL_ID_HERE
-  # This is the color that will be used for any probation related embeds.
-  log_color: 0xffffff
+  log_channel:          YOUR_CHANNEL_ID_HERE
+  # This is the colors that will be used for any probation related embeds.
+  log_color:            0xffffff
+  dm_color:             0xffffff
   # This is the contents of a message that will be posted in a newly created probation channel.
-  info_message: "YOUR_MESSAGE_HERE"
+  info_message:        "YOUR_MESSAGE_HERE"
   # This is the contents of a DM that will be sent to a user when probated.
   # You can add %time% into the string and it will be replaced with the time the user will be let out of probation.
   # Ex: "You'll be here until %time%" -> "You'll be here until 2022/11/22 04:23:56"
-  probation_message: "YOUR_MESSAGE_HERE"
+  probation_message:   "YOUR_MESSAGE_HERE"
   # This is the contents of a DM that will be sent to a user when striked.
   # The same %time% replacement applies, but you can also use %num_strikes% to show the number of strikes.
   # Ex: "You have %num_strikes% strikes" -> "You have 2 strikes"
-  strike_message: "YOUR_MESSAGE_HERE"
+  strike_message:      "YOUR_MESSAGE_HERE"
     # Same as above, but is sent for strikes that expire.
   # %time% and %num_strikes% still work, but you can also use %expiry_time% to show when the strike will expire.
   temp_strike_message: "YOUR_MESSAGE_HERE"
+  # Amount of strikes needed to kick or ban a user.
+  strikes_kick_on:  3
+  strikes_ban_on:   5
