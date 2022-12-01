@@ -123,18 +123,34 @@ async def purge(ctx: lightbulb.Context) -> None:
 
 def load(bot):
     bot.add_plugin(plugin)
+
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = None
+
     for guild in plugin.d["config"]:
         if (datetime.datetime.now() - bot.d["start_time"]).seconds < 10:
-            asyncio.run(
-                db.del_table("bancache")
-            )  # Clear ban cache just in case something happened while the bot was offline
-            asyncio.run(
-                db.create_table(
-                    "bancache",
-                    f"guild_{guild}",
-                    ("id", "searchable"),
+            if loop and loop.is_running():
+                loop.create_task(
+                    db.del_table("bancache")
+                )  # Clear ban cache just in case something happened while the bot was offline
+                loop.create_task(
+                    db.create_table(
+                        "bancache",
+                        f"guild_{guild}",
+                        ("id", "searchable"),
+                    )
                 )
-            )
+            else:
+                asyncio.run(db.del_table("bancache"))
+                asyncio.run(
+                    db.create_table(
+                        "bancache",
+                        f"guild_{guild}",
+                        ("id", "searchable"),
+                    )
+                )
 
 
 def unload(bot):

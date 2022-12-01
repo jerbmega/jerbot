@@ -43,12 +43,29 @@ async def on_message_update(event: hikari.GuildMessageUpdateEvent) -> None:
 def load(bot):
     bot.add_plugin(plugin)
     main.load_plugin_configs("logs", plugin.d)
+    
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = None
+
     for guild in plugin.d["config"]:
-        asyncio.run(
-            db.create_table(
-                "logs", f"guild_{guild}", ("id", "author", "channel", "content", "time")
+        if loop and loop.is_running():
+            loop.create_task(
+                db.create_table(
+                    "logs",
+                    f"guild_{guild}",
+                    ("id", "author", "channel", "content", "time"),
+                )
             )
-        )
+        else:
+            asyncio.run(
+                db.create_table(
+                    "logs",
+                    f"guild_{guild}",
+                    ("id", "author", "channel", "content", "time"),
+                )
+            )
 
 
 def unload(bot):

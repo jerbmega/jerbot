@@ -171,10 +171,21 @@ async def on_message_update(event: hikari.GuildMessageUpdateEvent) -> None:
 
 def load(bot):
     bot.add_plugin(plugin)
+
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = None
+
     for guild in plugin.d["config"]:
-        asyncio.run(
-            db.create_table("watchlist", f"guild_{guild}", ("id", "reason"))
-        )  # sqlite doesn't support db names just being numbers apparently (lame)
+        if loop and loop.is_running():
+            loop.create_task(
+                db.create_table("watchlist", f"guild_{guild}", ("id", "reason"))
+            )  # sqlite doesn't support db names just being numbers apparently (lame)
+        else:
+            asyncio.run(
+                db.create_table("watchlist", f"guild_{guild}", ("id", "reason"))
+            )  # sqlite doesn't support db names just being numbers apparently (lame)
 
 
 def unload(bot):

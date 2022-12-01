@@ -581,15 +581,35 @@ async def on_member_leave(event: hikari.MemberDeleteEvent) -> None:
 
 def load(bot):
     bot.add_plugin(plugin)
+
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = None
+
     for guild in plugin.d["config"]:
-        asyncio.run(
-            db.create_table(
-                "probate",
-                f"probations_{guild}",
-                ("user_id", "channel_id", "time", "reason"),
+        if loop and loop.is_running():
+            loop.create_task(
+                db.create_table(
+                    "probate",
+                    f"probations_{guild}",
+                    ("user_id", "channel_id", "time", "reason"),
+                )
             )
-        )
-        asyncio.run(db.create_table("probate", f"strikes_{guild}", ("id", "reason")))
+            loop.create_task(
+                db.create_table("probate", f"strikes_{guild}", ("id", "reason"))
+            )
+        else:
+            asyncio.run(
+                db.create_table(
+                    "probate",
+                    f"probations_{guild}",
+                    ("user_id", "channel_id", "time", "reason"),
+                )
+            )
+            asyncio.run(
+                db.create_table("probate", f"strikes_{guild}", ("id", "reason"))
+            )
 
 
 def unload(bot):
