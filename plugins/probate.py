@@ -429,7 +429,7 @@ async def strike(ctx: lightbulb.Context) -> None:
             args=(
                 "probate",
                 f"strikes_{ctx.guild_id}",
-                f'id == {ctx.options.user.id} and reason == "{ctx.options.reason}" limit 1',
+                f"timestamp = {scheduled_timestamp_round} limit 1",
             ),
         )
 
