@@ -1,3 +1,4 @@
+# This code is deprecated! Please use the `reheated` branch instead.
 # jerbot-neo
 
 jerbot-neo is the **open-source** release of jerbot2, rewritten from scratch so the code is good enough that I feel comfortable open-sourcing it. I wanted to rewrite jerbot2 at some point either way, and figured this would be a good time to do it.
