@@ -438,11 +438,11 @@ async def strike(ctx: lightbulb.Context) -> None:
         ).send(embed=embed)
 
     await probate_user(ctx.get_guild(), ctx.options.user, ctx.options.reason, "24h")
-    if strike_num >= plugin.d["config"][ctx.guild_id]["strikes_ban_on"]:
+    if plugin.d["config"][ctx.guild_id]["strikes_ban_on"] and strike_num >= plugin.d["config"][ctx.guild_id]["strikes_ban_on"]:
         await ctx.get_guild().ban(
             ctx.options.user, reason=f"Strike {strike_num} (automatic ban)."
         )
-    elif strike_num >= plugin.d["config"][ctx.guild_id]["strikes_kick_on"]:
+    elif plugin.d["config"][ctx.guild_id]["strikes_kick_on"] and strike_num >= plugin.d["config"][ctx.guild_id]["strikes_kick_on"]:
         await ctx.get_guild().kick(
             ctx.options.user, reason=f"Strike {strike_num} (automatic kick)."
         )

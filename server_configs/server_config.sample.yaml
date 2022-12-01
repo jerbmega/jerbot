@@ -72,6 +72,7 @@ aegis:
     channel: YOUR_CHANNEL_ID_HERE 
 
 # This configures probations and strikes.
+# Unlike most of the other modules, all of these are required except for log_channel, strikes_kick_on, and strikes_ban_on.
 probate:
   # Put the ID of any roles you want to be able to manage probations/strikes and see probation channels.
   allowed_roles:
