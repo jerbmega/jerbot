@@ -170,7 +170,7 @@ async def probate_user(
         "probate", f"logs_{user.id}", ("author", "username", "content", "time")
     )
     await channel.send(content=plugin.d["config"][guild.id]["info_message"])
-    test = scheduler.add_job(
+    scheduler.add_job(
         unprobate_user,
         DateTrigger(parse_time(time)),
         id=f"unprobate_{guild.id}_{user.id}",
@@ -382,8 +382,17 @@ async def strike(ctx: lightbulb.Context) -> None:
         if role in plugin.d["config"][ctx.guild_id]["allowed_roles"]:
             raise err.UnstrikeableRole
 
+    if ctx.options.time:
+        scheduled_time = parse_time(ctx.options.time)
+        scheduled_timestamp_round = int(scheduled_time.timestamp())
     await db.insert(
-        "probate", f"strikes_{ctx.guild_id}", (ctx.options.user.id, ctx.options.reason)
+        "probate",
+        f"strikes_{ctx.guild_id}",
+        (
+            ctx.options.user.id,
+            ctx.options.reason,
+            scheduled_timestamp_round if ctx.options.time else None,
+        ),
     )
     strike_num = len(
         await db.queryall(
@@ -402,14 +411,27 @@ async def strike(ctx: lightbulb.Context) -> None:
         if ctx.options.time:
             response = response.replace(
                 "%expiry_time%",
-                timestamp_to_human(parse_time(ctx.options.time).timestamp()),
+                timestamp_to_human(scheduled_time.timestamp()),
             )
         await ctx.options.user.send(
             response,
             embed=await strike_dm_embed(ctx.options.reason, ctx.guild_id),
         )
-    except hikari.errors.ForbiddenError:
+    except (hikari.errors.ForbiddenError, hikari.errors.BadRequestError):
         pass
+
+    if ctx.options.time:
+        scheduler.add_job(
+            db.remove,
+            DateTrigger(scheduled_time),
+            id=f"delstrike_{ctx.guild_id}_{ctx.options.user.id}_{scheduled_timestamp_round}",
+            replace_existing=True,
+            args=(
+                "probate",
+                f"strikes_{ctx.guild_id}",
+                f'id == {ctx.options.user.id} and reason == "{ctx.options.reason}" limit 1',
+            ),
+        )
 
     if plugin.d["config"][ctx.guild_id]["log_channel"]:
 
@@ -429,7 +451,7 @@ async def strike(ctx: lightbulb.Context) -> None:
         if ctx.options.time:
             embed.add_field(
                 "Scheduled Expiry Time",
-                timestamp_to_human(parse_time(ctx.options.time).timestamp()),
+                timestamp_to_human(scheduled_time.timestamp()),
                 inline=True,
             )
 
@@ -438,11 +460,17 @@ async def strike(ctx: lightbulb.Context) -> None:
         ).send(embed=embed)
 
     await probate_user(ctx.get_guild(), ctx.options.user, ctx.options.reason, "24h")
-    if plugin.d["config"][ctx.guild_id]["strikes_ban_on"] and strike_num >= plugin.d["config"][ctx.guild_id]["strikes_ban_on"]:
+    if (
+        plugin.d["config"][ctx.guild_id]["strikes_ban_on"]
+        and strike_num >= plugin.d["config"][ctx.guild_id]["strikes_ban_on"]
+    ):
         await ctx.get_guild().ban(
             ctx.options.user, reason=f"Strike {strike_num} (automatic ban)."
         )
-    elif plugin.d["config"][ctx.guild_id]["strikes_kick_on"] and strike_num >= plugin.d["config"][ctx.guild_id]["strikes_kick_on"]:
+    elif (
+        plugin.d["config"][ctx.guild_id]["strikes_kick_on"]
+        and strike_num >= plugin.d["config"][ctx.guild_id]["strikes_kick_on"]
+    ):
         await ctx.get_guild().kick(
             ctx.options.user, reason=f"Strike {strike_num} (automatic kick)."
         )
@@ -494,17 +522,31 @@ async def liststrikes(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def delstrike(ctx: lightbulb.Context) -> None:
+    strike_time = await db.query(
+        "probate",
+        f'select timestamp from strikes_{ctx.guild_id} where id == {ctx.options.user.id} and reason == "{ctx.options.reason}" limit 1',
+    )
+
     await db.remove(
         "probate",
         f"strikes_{ctx.guild_id}",
-        f'id == {ctx.options.user.id} and reason == "{ctx.options}" limit 1',
+        f'id == {ctx.options.user.id} and reason == "{ctx.options.reason}" limit 1',
     )
-    new_strike_num = len(
-        await db.queryall(
-            "probate",
-            f"select id from strikes_{ctx.guild_id} where id = {ctx.options.user.id}",
+    if strike_time:
+        scheduler.remove_job(
+            f"delstrike_{ctx.guild_id}_{ctx.options.user.id}_{strike_time}"
         )
-    )
+
+    try:
+        new_strike_num = len(
+            await db.queryall(
+                "probate",
+                f"select id from strikes_{ctx.guild_id} where id = {ctx.options.user.id}",
+            )
+        )
+    except TypeError:
+        new_strike_num = 0
+
     await ctx.respond(f"Done. User now has {new_strike_num} strikes.")
 
 
@@ -597,7 +639,9 @@ def load(bot):
                 )
             )
             loop.create_task(
-                db.create_table("probate", f"strikes_{guild}", ("id", "reason"))
+                db.create_table(
+                    "probate", f"strikes_{guild}", ("id", "reason", "timestamp")
+                )
             )
         else:
             asyncio.run(
@@ -608,7 +652,9 @@ def load(bot):
                 )
             )
             asyncio.run(
-                db.create_table("probate", f"strikes_{guild}", ("id", "reason"))
+                db.create_table(
+                    "probate", f"strikes_{guild}", ("id", "reason", "timestamp")
+                )
             )
 
 
