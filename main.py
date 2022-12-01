@@ -77,10 +77,14 @@ if __name__ == "__main__":
                 )
                 return
 
+        with open("/tmp/err.txt", "w+") as err_txt:
+            err_txt.write(' '.join(traceback.format_exception(exception)))
         await event.context.respond(
-            f"An unknown error occured trying to run `{event.context.command.name}`.\n ```{' '.join(traceback.format_exception(exception))}```",
+            f"An unknown error occured trying to run `{event.context.command.name}`. Please see the attachment for more info.",
             flags=hikari.MessageFlag.EPHEMERAL,
+            attachment="/tmp/err.txt",
         )
+        os.remove(f"/tmp/err.txt")
 
     @bot.listen()
     async def start_scheduler(event: hikari.StartedEvent):
@@ -107,11 +111,6 @@ def load_plugin_configs(plugin: str, datastore: lightbulb.utils.data_store.DataS
                 if plugin in config:
                     datastore["config"][server_id] = config[plugin]
 
-
-"""
-TODO
-Strikes
-"""
 
 """
 TODO Book of Secrets submodule
