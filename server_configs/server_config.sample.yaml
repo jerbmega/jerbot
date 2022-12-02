@@ -85,6 +85,7 @@ probate:
   log_color:            0xffffff
   dm_color:             0xffffff
   # This is the contents of a message that will be posted in a newly created probation channel.
+  # You can add %mention% into the string and it will be replaced with a mention of the user.
   info_message:        "YOUR_MESSAGE_HERE"
   # This is the contents of a DM that will be sent to a user when probated.
   # You can add %time% into the string and it will be replaced with the time the user will be let out of probation.

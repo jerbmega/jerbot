@@ -169,7 +169,11 @@ async def probate_user(
     await db.create_table(
         "probate", f"logs_{user.id}", ("author", "username", "content", "time")
     )
-    await channel.send(content=plugin.d["config"][guild.id]["info_message"])
+    await channel.send(
+        content=plugin.d["config"][guild.id]["info_message"].replace(
+            "%mention%", user.mention
+        )
+    )
     scheduler.add_job(
         unprobate_user,
         DateTrigger(parse_time(time)),
