@@ -5,3 +5,4 @@ token: YOUR_TOKEN_HERE
 # By default, this is just the plugins folder, but more can be added as needed.
 plugin_folders:
   - plugins
+  - example_submodule
