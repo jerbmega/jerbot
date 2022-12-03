@@ -52,32 +52,34 @@ async def is_blacklisted(message: hikari.Message):
 
     # Perform preliminary filtration with decancer, remove whitespace from the entire sentence, reconstruct it into words with wordninja
     # This avoids any attempts to dodge the filter via whitespace or unicode variation
-    content = re.sub(
-        r"[^a-zA-Z0-9]",
-        "",
-        decancer.parse(message.content),
-        flags=re.UNICODE,
-    )
-    content = wordninja.split(content)
-    for word in content:
-        if utils.full_process(word):
-            match = extractOne(
-                word,
-                plugin.d["config"][message.guild_id]["triggers"],
-                scorer=token_sort_ratio,
-            )
-            if match[1] >= 90:
-                return True
+    if "content" in plugin.d["config"][message.guild_id]:
+        content = re.sub(
+            r"[^a-zA-Z0-9]",
+            "",
+            decancer.parse(message.content),
+            flags=re.UNICODE,
+        )
+        content = wordninja.split(content)
+        for word in content:
+            if utils.full_process(word):
+                match = extractOne(
+                    word,
+                    plugin.d["config"][message.guild_id]["triggers"],
+                    scorer=token_sort_ratio,
+                )
+                if match[1] >= 90:
+                    return True
 
     # Try a standard blacklist next, works for filtering copypastas, Discord invites and such
-    for trigger in plugin.d["config"][message.guild_id]["special_triggers"]:
-        if trigger in re.sub(
-            r"\s+",
-            "",
-            message.content,
-            flags=re.UNICODE,
-        ):
-            return True
+    if "special_triggers" in plugin.d["config"][message.guild_id]:
+        for trigger in plugin.d["config"][message.guild_id]["special_triggers"]:
+            if trigger in re.sub(
+                r"\s+",
+                "",
+                message.content,
+                flags=re.UNICODE,
+            ):
+                return True
     return False
 
 
