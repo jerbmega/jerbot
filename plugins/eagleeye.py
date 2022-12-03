@@ -57,9 +57,11 @@ async def unwatch(ctx: lightbulb.Context) -> None:
 @lightbulb.command("watchlist", "List watched users", guilds=get_enabled_guilds())
 @lightbulb.implements(lightbulb.SlashCommand)
 async def watchlist(ctx: lightbulb.Context) -> None:
-    users = await db.queryall("watchlist", f"select id from guild_{ctx.guild_id}")
+    usernames = await db.queryall(
+        "watchlist", f"select username from guild_{ctx.guild_id}"
+    )
     await ctx.respond(
-        f"I have eyes on `{', '.join([ctx.get_guild().get_member(user).username for user in users])}`"
+        f"I have eyes on `{', '.join([username for username in usernames])}`"
     )
 
 
@@ -180,11 +182,15 @@ def load(bot):
     for guild in plugin.d["config"]:
         if loop and loop.is_running():
             loop.create_task(
-                db.create_table("watchlist", f"guild_{guild}", ("id", "reason"))
+                db.create_table(
+                    "watchlist", f"guild_{guild}", ("id", "username", "reason")
+                )
             )  # sqlite doesn't support db names just being numbers apparently (lame)
         else:
             asyncio.run(
-                db.create_table("watchlist", f"guild_{guild}", ("id", "reason"))
+                db.create_table(
+                    "watchlist", f"guild_{guild}", ("id", "username", "reason")
+                )
             )  # sqlite doesn't support db names just being numbers apparently (lame)
 
 
