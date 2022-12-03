@@ -44,7 +44,7 @@ blacklist:
 watchlist:
   # Put the ID of roles that should be authorized to use this command.
   roles:
-  - 273609538731638784
+  - YOUR_ROLE_ID_HERE
   log_color: 0xffffff
   channel: YOUR_CHANNEL_ID_HERE
 
