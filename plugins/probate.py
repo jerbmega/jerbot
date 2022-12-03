@@ -498,12 +498,11 @@ async def liststrikes(ctx: lightbulb.Context) -> None:
         "probate",
         f"select reason from strikes_{ctx.guild_id} where id = {ctx.options.user.id}",
     )
-
     embed = hikari.embeds.Embed(
         title=f"{ctx.options.user.username}#{ctx.options.user.discriminator}",
         color=plugin.d["config"][ctx.guild_id]["log_color"],
     )
-    for i, strike in enumerate(strikes[1]):
+    for i, strike in enumerate(strikes, 1):
         embed.add_field(f"Strike {i}", strike)
     await ctx.respond(embed=embed)
 
