@@ -45,6 +45,11 @@ async def dm_embed(content: str = None, guild_id: int = None):
 
 
 async def is_blacklisted(message: hikari.Message):
+    if "exempt_roles" in plugin.d["config"][message.guild_id]:
+        for role in message.member.role_ids:
+            if role in plugin.d["config"][message.guild_id]["exempt_roles"]:
+                return False
+
     # Perform preliminary filtration with decancer, remove whitespace from the entire sentence, reconstruct it into words with wordninja
     # This avoids any attempts to dodge the filter via whitespace or unicode variation
     content = re.sub(

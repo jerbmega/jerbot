@@ -31,6 +31,8 @@ modlogs:
 
 # This configures the blacklist functionality. You can put as many blacklisted words here as necessary for your setup.
 blacklist:
+  exempt_roles:
+  - YOUR_ROLE_ID_HERE
   triggers:
   - "YOUR_BLACKLISTED_WORD_HERE"
   - "YOUR_SECOND_BLACKLISTED_WORD_HERE"
