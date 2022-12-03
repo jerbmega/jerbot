@@ -16,3 +16,7 @@ class UserNotInProbation(Exception):
 
 class UnstrikeableRole(Exception):
     pass
+
+
+class UserHasNoStrikes(Exception):
+    pass

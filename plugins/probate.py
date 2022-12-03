@@ -498,6 +498,8 @@ async def liststrikes(ctx: lightbulb.Context) -> None:
         "probate",
         f"select reason from strikes_{ctx.guild_id} where id = {ctx.options.user.id}",
     )
+    if not strikes:
+        raise err.UserHasNoStrikes
     embed = hikari.embeds.Embed(
         title=f"{ctx.options.user.username}#{ctx.options.user.discriminator}",
         color=plugin.d["config"][ctx.guild_id]["log_color"],

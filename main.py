@@ -69,6 +69,10 @@ if __name__ == "__main__":
                 "exception": err.UnstrikeableRole,
                 "response": "Users that can manage strikes can't be striked.",
             },
+            {
+                "exception": err.UserHasNoStrikes,
+                "response": "This user has no strikes.",
+            },
         ]
         for response in exceptions:
             if isinstance(exception, response["exception"]):
@@ -78,7 +82,7 @@ if __name__ == "__main__":
                 return
 
         with open("/tmp/err.txt", "w+") as err_txt:
-            err_txt.write(' '.join(traceback.format_exception(exception)))
+            err_txt.write(" ".join(traceback.format_exception(exception)))
         await event.context.respond(
             f"An unknown error occured trying to run `{event.context.command.name}`. Please see the attachment for more info.",
             flags=hikari.MessageFlag.EPHEMERAL,
