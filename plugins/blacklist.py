@@ -63,6 +63,16 @@ async def is_blacklisted(message: hikari.Message):
             )
             if match[1] >= 90:
                 return True
+
+    # Try a standard blacklist next, works for filtering copypastas, Discord invites and such
+    for trigger in plugin.d["config"][message.guild_id]["triggers"]:
+        if trigger in re.sub(
+            r"\s+",
+            "",
+            message.content,
+            flags=re.UNICODE,
+        ):
+            return True
     return False
 
 
