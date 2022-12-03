@@ -502,9 +502,8 @@ async def liststrikes(ctx: lightbulb.Context) -> None:
     embed = hikari.embeds.Embed(
         title=f"{ctx.options.user.username}#{ctx.options.user.discriminator}",
         color=plugin.d["config"][ctx.guild_id]["log_color"],
+        fields=[{f"Strike {i}", strike} for i, strike in enumerate(strikes, 1)],
     )
-    for i, strike in enumerate(strikes, 1):
-        embed.add_field(f"Strike {i}", strike, inline=True)
     await ctx.respond(embed=embed)
 
 
