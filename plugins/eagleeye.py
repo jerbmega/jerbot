@@ -124,6 +124,8 @@ async def watchlist_embed_edit(
 
 @plugin.listener(hikari.GuildMessageCreateEvent)
 async def on_message_create(event: hikari.GuildMessageCreateEvent) -> None:
+    if not plugin.d["config"][event.guild_id]:
+        return
     watched_ids = await db.queryall(
         "watchlist", f"select id from guild_{event.guild_id}"
     )
@@ -148,6 +150,8 @@ async def on_message_create(event: hikari.GuildMessageCreateEvent) -> None:
 
 @plugin.listener(hikari.GuildMessageUpdateEvent)
 async def on_message_update(event: hikari.GuildMessageUpdateEvent) -> None:
+    if not plugin.d["config"][event.guild_id]:
+        return
     watched_ids = await db.queryall(
         "watchlist", f"select id from guild_{event.guild_id}"
     )
