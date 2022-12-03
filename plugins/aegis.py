@@ -91,9 +91,12 @@ async def announce(ctx: lightbulb.Context) -> None:
     )
 
     for guild in eligible_guilds:
-        await plugin.bot.cache.get_guild_channel(
-            plugin.d["config"][guild]["announcements"]["channel"]
-        ).send(ctx.options.announcement)
+        try:
+            await plugin.bot.cache.get_guild_channel(
+                plugin.d["config"][guild]["announcements"]["channel"]
+            ).send(ctx.options.announcement)
+        except hikari.errors.ForbiddenError:
+            pass
 
     await ctx.edit_last_response("Done.")
 
