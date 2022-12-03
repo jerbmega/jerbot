@@ -37,7 +37,7 @@ async def log_embed(
 async def on_member_join(event: hikari.MemberCreateEvent) -> None:
     if (
         event.guild_id in plugin.d["config"]
-        and plugin.d["config"][event.guild_id]["member_joins"]
+        and "member_joins" in plugin.d["config"][event.guild_id]
     ):
         account_age = event.member.joined_at.replace(
             microsecond=0
@@ -71,7 +71,7 @@ async def on_member_join(event: hikari.MemberCreateEvent) -> None:
 async def on_member_leave(event: hikari.MemberDeleteEvent) -> None:
     if (
         event.guild_id in plugin.d["config"]
-        and plugin.d["config"][event.guild_id]["member_leaves"]
+        and "member_leaves" in plugin.d["config"][event.guild_id]
     ):
 
         await plugin.bot.cache.get_guild_channel(
@@ -100,7 +100,7 @@ async def on_member_leave(event: hikari.MemberDeleteEvent) -> None:
 async def on_message_delete(event: hikari.GuildMessageDeleteEvent) -> None:
     if (
         event.guild_id in plugin.d["config"]
-        and plugin.d["config"][event.guild_id]["message_deletes"]
+        and "message_deletes" in plugin.d["config"][event.guild_id]
     ):
         await plugin.bot.cache.get_guild_channel(
             plugin.d["config"][event.guild_id]["message_deletes"]["channel"]
@@ -126,7 +126,7 @@ async def on_message_delete(event: hikari.GuildMessageDeleteEvent) -> None:
 async def on_message_update(event: hikari.GuildMessageUpdateEvent) -> None:
     if (
         event.guild_id in plugin.d["config"]
-        and plugin.d["config"][event.guild_id]["message_edits"]
+        and "message_edits" in plugin.d["config"][event.guild_id]
         and not event.message.content == hikari.UNDEFINED
     ):
         await plugin.bot.cache.get_guild_channel(
@@ -154,7 +154,7 @@ async def on_message_update(event: hikari.GuildMessageUpdateEvent) -> None:
 async def on_member_banned(event: hikari.BanCreateEvent) -> None:
     if (
         event.guild_id in plugin.d["config"]
-        and plugin.d["config"][event.guild_id]["member_bans"]
+        and "member_bans" in plugin.d["config"][event.guild_id]
     ):
         await plugin.bot.cache.get_guild_channel(
             plugin.d["config"][event.guild_id]["member_bans"]["channel"]
