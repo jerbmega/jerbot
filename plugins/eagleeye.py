@@ -133,7 +133,7 @@ async def on_message_create(event: hikari.GuildMessageCreateEvent) -> None:
         event.guild_id in plugin.d["config"]
         and not event.content == None
         and not event.is_bot
-        and watched_ids
+        and watched_ids != None
         and event.author.id in watched_ids
     ):
         await plugin.bot.cache.get_guild_channel(
