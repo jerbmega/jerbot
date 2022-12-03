@@ -392,6 +392,7 @@ async def strike(ctx: lightbulb.Context) -> None:
     await db.insert(
         "probate",
         f"strikes_{ctx.guild_id}",
+        "(?,?,?)",
         (
             ctx.options.user.id,
             ctx.options.reason,
