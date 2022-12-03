@@ -36,6 +36,9 @@ blacklist:
   triggers:
   - "YOUR_BLACKLISTED_WORD_HERE"
   - "YOUR_SECOND_BLACKLISTED_WORD_HERE"
+  # These are searched as-is.
+  special_triggers:
+  - "YOUR_SPECIAL_BLACKLISTED_WORD_HERE"
   dm_color:     0xffffff
   log_color:    0xffffff
   channel:  YOUR_CHANNEL_ID_HERE
