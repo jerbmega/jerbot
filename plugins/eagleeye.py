@@ -35,7 +35,7 @@ async def watch(ctx: lightbulb.Context) -> None:
     await db.insert(
         "watchlist",
         f"guild_{ctx.guild_id}",
-        (ctx.options.user.id, ctx.options.reason),
+        (ctx.options.user.id, ctx.options.user.username, ctx.options.reason),
     )
     await ctx.respond(f"`{ctx.options.user.username}` added to the watchlist.")
 
