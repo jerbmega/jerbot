@@ -211,7 +211,7 @@ async def unprobate_user(guild_id: int, user_id: int, user_leave: bool = False):
 
     if not user_leave:
         await db.remove("probate", f"probations_{guild_id}", f"user_id = {user_id}")
-    if plugin.d["config"][guild_id]["log_channel"]:
+    if "log_channel" in plugin.d["config"][guild_id]:
         with open(f"/tmp/logs_{user_id}.txt", "w+") as logs:  # TODO async this?
             for message in await db.queryall(
                 "probate", f"select * from logs_{user_id}"
@@ -301,7 +301,7 @@ async def probate(ctx: lightbulb.Context) -> None:
         )
     except hikari.errors.ForbiddenError:
         pass
-    if plugin.d["config"][ctx.guild_id]["log_channel"]:
+    if "log_channel" in plugin.d["config"][ctx.guild_id]:
         embed = await log_embed(
             user=ctx.options.user,
             event="User placed in probation.",
@@ -437,7 +437,7 @@ async def strike(ctx: lightbulb.Context) -> None:
             ),
         )
 
-    if plugin.d["config"][ctx.guild_id]["log_channel"]:
+    if "log_channel" in plugin.d["config"][ctx.guild_id]:
 
         embed = await log_embed(
             user=ctx.options.user,
@@ -592,7 +592,7 @@ async def on_member_join(event: hikari.MemberCreateEvent) -> None:
             old_data[0],
         )
 
-        if plugin.d["config"][event.guild_id]["log_channel"]:
+        if "log_channel" in plugin.d["config"][event.guild_id]:
             await plugin.bot.cache.get_guild_channel(
                 plugin.d["config"][event.guild_id]["log_channel"]
             ).send(

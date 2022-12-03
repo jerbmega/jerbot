@@ -37,7 +37,7 @@ async def global_ban(ctx: lightbulb.Context) -> None:
     eligible_guilds = []
 
     for guild in get_enabled_guilds():
-        if plugin.d["config"][guild]["global_ban"]:
+        if "global_ban" in plugin.d["config"][guild]:
             eligible_guilds.append(guild)
 
     try:
@@ -82,7 +82,7 @@ async def announce(ctx: lightbulb.Context) -> None:
     eligible_guilds = []
 
     for guild in get_enabled_guilds():
-        if plugin.d["config"][guild]["announcements"]:
+        if "announcements" in plugin.d["config"][guild]:
             eligible_guilds.append(guild)
 
     await ctx.respond(
