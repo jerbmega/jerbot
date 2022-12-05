@@ -118,11 +118,3 @@ def load_plugin_configs(plugin: str, datastore: lightbulb.utils.data_store.DataS
 
                 if plugin in config:
                     datastore["config"][server_id] = config[plugin]
-
-
-"""
-TODO Book of Secrets submodule
-Item functionality
-Platinum God parsing (can we replace this with more accurate hand-written descriptions?)
-Wiki parsing (https://pypi.org/project/fandom-py/ is probably perfect for this as opposed to manually scraping)
-"""
