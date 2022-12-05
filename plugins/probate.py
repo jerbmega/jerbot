@@ -382,6 +382,9 @@ async def unprobate(ctx: lightbulb.Context) -> None:
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def strike(ctx: lightbulb.Context) -> None:
+    if ctx.options.user.is_bot:
+        raise err.UnstrikeableBot
+
     for role in ctx.get_guild().get_member(ctx.options.user).role_ids:
         if role in plugin.d["config"][ctx.guild_id]["allowed_roles"]:
             raise err.UnstrikeableRole

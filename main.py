@@ -73,6 +73,10 @@ if __name__ == "__main__":
                 "exception": err.UserHasNoStrikes,
                 "response": "This user has no strikes.",
             },
+            {
+                "exception": err.UserHasNoStrikes,
+                "response": "Bots can't be striked.",
+            },
         ]
         for response in exceptions:
             if isinstance(exception, response["exception"]):

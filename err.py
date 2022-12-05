@@ -18,5 +18,9 @@ class UnstrikeableRole(Exception):
     pass
 
 
+class UnstrikeableBot(Exception):
+    pass
+
+
 class UserHasNoStrikes(Exception):
     pass
