@@ -97,6 +97,8 @@ probate:
   # This is the contents of a DM that will be sent to a user when probated.
   # The same %time% replacement applies.
   probation_message:   "YOUR_MESSAGE_HERE"
+  # This will be DM'd to the user when they are removed from probation.
+  unprobation_message: "YOUR_MESSAGE_HERE"
   # This is the contents of a DM that will be sent to a user when striked.
   # The same %time% replacement applies, but you can also use %num_strikes% to show the number of strikes.
   # Ex: "You have %num_strikes% strikes" -> "You have 2 strikes"
