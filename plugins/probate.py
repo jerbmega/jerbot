@@ -158,13 +158,13 @@ async def probate_user(
 
         channel = await guild.create_text_channel(
             name=f"probation_{user.id}",
-            topic=f"{user.mention}{(' - ' + reason) if reason else ''}",
+            topic=f"{user.mention} - {time}{(' - ' + reason) if reason else ''}",
             category=category,
             permission_overwrites=overwrites,
         )
     elif reason:
         await channel.edit(
-            topic=f"{user.mention}{(' - ' + reason)}",
+            topic=f"{user.mention} - {time} - {reason}",
         )
     await db.insert(
         "probate",
