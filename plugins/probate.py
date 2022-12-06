@@ -52,6 +52,12 @@ def timestamp_to_human(
     return f"<t:{int(timestamp)}:F>"
 
 
+def timestamp_to_human_eta(
+    timestamp: float,
+):
+    return f"<t:{int(timestamp)}:A>"
+
+
 def find_channel(guild: hikari.Guild, type: hikari.ChannelType, name: str):
     for channel in guild.get_channels().values():
         if channel.type == type and channel.name == name:
@@ -170,9 +176,9 @@ async def probate_user(
         "probate", f"logs_{user.id}", ("author", "username", "content", "time")
     )
     await channel.send(
-        content=plugin.d["config"][guild.id]["info_message"].replace(
-            "%mention%", user.mention
-        )
+        content=plugin.d["config"][guild.id]["info_message"]
+        .replace("%mention%", user.mention)
+        .replace("%time%", timestamp_to_human_eta(parse_time(time)))
     )
     scheduler.add_job(
         unprobate_user,
