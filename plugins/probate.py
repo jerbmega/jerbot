@@ -459,6 +459,7 @@ async def strike(ctx: lightbulb.Context) -> None:
                     "name": "Issuer",
                     "value": f"{ctx.author.username}#{ctx.author.discriminator}",
                 },
+                {"name": "Reason", "value": ctx.options.reason},
             ],
         )
 
