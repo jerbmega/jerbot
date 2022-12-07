@@ -178,7 +178,7 @@ async def probate_user(
     await channel.send(
         content=plugin.d["config"][guild.id]["info_message"]
         .replace("%mention%", user.mention)
-        .replace("%time%", timestamp_to_human_eta(parse_time(time)))
+        .replace("%time%", timestamp_to_human_eta(parse_time(time).timestamp()))
     )
     scheduler.add_job(
         unprobate_user,
