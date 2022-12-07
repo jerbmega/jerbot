@@ -1,0 +1,10 @@
+version: '3.3'
+services:
+    jerbot:
+        volumes:
+            - './config.yaml:/jerbot/config.yaml'
+            - './server_configs:/jerbot/server_configs'
+            - './db:/jerbot/db'
+            # OPTIONAL - Uncomment this to be able to /reload new plugins after a git clone as opposed to needing to restart the bot.
+            #- './plugins:/jerbot/plugins'
+        image: ghcr.io/jerbmega/jerbot:latest
