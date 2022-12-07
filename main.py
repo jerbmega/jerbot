@@ -74,8 +74,13 @@ if __name__ == "__main__":
                 "response": "This user has no strikes.",
             },
             {
-                "exception": err.UserHasNoStrikes,
+                "exception": err.UnstrikeableBot,
                 "response": "Bots can't be striked.",
+            },
+            # Watchlist
+            {
+                "exception": err.UserAlreadyWatched,
+                "response": "This user is already in the watchlist.",
             },
         ]
         for response in exceptions:

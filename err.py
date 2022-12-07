@@ -24,3 +24,7 @@ class UnstrikeableBot(Exception):
 
 class UserHasNoStrikes(Exception):
     pass
+
+
+class UserAlreadyWatched(Exception):
+    pass

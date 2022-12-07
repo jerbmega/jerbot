@@ -32,6 +32,8 @@ plugin.add_checks(lightbulb.human_only, check_authorized)
 @lightbulb.command("watch", "Add a user to the watchlist", guilds=get_enabled_guilds())
 @lightbulb.implements(lightbulb.SlashCommand)
 async def watch(ctx: lightbulb.Context) -> None:
+    if ctx.options.user.id in await db.query(f"select id from guild_{ctx.guild_id}"):
+        raise err.UserAlreadyWatched
     await db.insert(
         "watchlist",
         f"guild_{ctx.guild_id}",
