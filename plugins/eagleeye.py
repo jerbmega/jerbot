@@ -164,7 +164,7 @@ async def on_message_update(event: hikari.GuildMessageUpdateEvent) -> None:
         and not event.content == None
         and not event.is_bot
         and watched_ids
-        and event.author.id in watched_ids
+        and event.author_id in watched_ids
     ):
         await plugin.bot.cache.get_guild_channel(
             plugin.d["config"][event.guild_id]["channel"]
