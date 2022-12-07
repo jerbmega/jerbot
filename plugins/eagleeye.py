@@ -7,6 +7,7 @@ from datetime import datetime
 
 import main
 import db
+import err
 
 
 def get_enabled_guilds():
@@ -32,9 +33,8 @@ plugin.add_checks(lightbulb.human_only, check_authorized)
 @lightbulb.command("watch", "Add a user to the watchlist", guilds=get_enabled_guilds())
 @lightbulb.implements(lightbulb.SlashCommand)
 async def watch(ctx: lightbulb.Context) -> None:
-    if ctx.options.user.id in await db.query(
-        "watchlist", f"select id from guild_{ctx.guild_id}"
-    ):
+    watched_ids = await db.queryall("watchlist", f"select id from guild_{ctx.guild_id}")
+    if watched_ids and ctx.options.user.id in watched_ids:
         raise err.UserAlreadyWatched
     await db.insert(
         "watchlist",
@@ -76,7 +76,7 @@ async def watchlist(ctx: lightbulb.Context) -> None:
     guilds=get_enabled_guilds(),
 )
 @lightbulb.implements(lightbulb.SlashCommand)
-async def watchlist(ctx: lightbulb.Context) -> None:
+async def watch_purge(ctx: lightbulb.Context) -> None:
     users = await db.queryall("watchlist", f"select id from guild_{ctx.guild_id}")
     num_users = len(users)
     for user in users:
