@@ -27,6 +27,7 @@ jobs:
         id: build_image
         uses: redhat-actions/buildah-build@v2
         with:
+          archs: amd64,arm64
           containerfiles: |
             ./Dockerfile
           image: ${{ env.IMAGE_NAME }}
