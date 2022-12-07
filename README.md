@@ -5,21 +5,28 @@ Jerbot is a generic, extensible, modular multi-purpose Discord bot. It primarily
 
 Jerbot's flexible configuration system allows for hot-toggling of features (or subfeatures, barring some edge cases!) for every server it's deployed on. There are *no* global commands- everything is done on a server by server basis.
 
-## Configuration
-Sample global and server-specific configuration files are located in the repo. Please see [config.sample.yaml](config.sample.yaml) and [server_config.sample.yaml](server_configs/server_config.sample.yaml) for more info.
 
 ## Running
-### Docker (Highly Recommended)
-I haven't submitted the bot to GHCR or Docker Hub yet, but plan to as soon as the bot is running in production. For now, use the Dockerfile. If you haven't used Docker before, [you'll need to install it.](https://docs.docker.com/engine/install/) I highly recommend checking it out- it makes running this stuff much easier!
+### [FOLLOW FIRST] Initial setup
+`git clone` the repository, then
+- Copy `config.sample.yaml` to `config.yaml`.
+- Tweak the `config.yaml` to your liking. Make sure your bot's token is correct, and that, if you plan to use any submodules like [Book of Secrets](https://github.com/boi-community/book-of-secrets), make sure the folder is added to `plugin_folders`.
+- In `server_configs`, copy `server_config.sample.yaml` to `(guild id).yaml`, where `(guild id)` is the ID of a guild you are going to deploy the bot in. Every guild the bot is in will need its own config.
+- Tweak every planned server config to your liking.
 
 
-`git clone` the repository, then build the image:
+### Docker Compose (Highly Recommended)
+If you haven't used Docker or Docker Compose before, [you'll need to install it.](https://docs.docker.com/engine/install/) I highly recommend checking it out- it makes running this stuff much easier!
 
-```bash
-docker build --tag jerbot
-```
+(This currently only works on AMD64- I'm working on getting Github Actions to cross compile for ARM64 as well.)
 
-Then, run the bot. There's a few bind mounts you'll need to make (when the bot is submitted to GHCR or Docker Hub, I'll supply a `docker-compose.yml `to make this easier.)
+- Optionally, uncomment the commented out plugins line in `docker-compose.yml`. This means that if the only changes in a commit are to plugins instead of the main bot, the plugins can simply be reloaded in place instead of requiring a container restart.
+- Initialize the bot with `docker compose up`.
+
+
+### Docker
+- Build the bot with `docker build --tag jerbot`.
+- Then, run the bot. There's a few bind mounts you'll need to make.
 ```bash
 docker run \
     -v "/full/path/to/your/config.yaml":/jerbot/config/yaml \
@@ -35,12 +42,9 @@ These instructions are for Linux, but should work for macOS as well. I have not 
 
 `git clone` the repository, then:
 
-(Optional, highly recommended) Create a virtualenv:
+- (Optional, highly recommended) Create a virtualenv:
 ```bash
 python3 -m virtualenv venv
 source venv/bin/activate
 ```
-Run the bot:
-```bash
-python3 main.py
-```
+- Run the bot: `python3 main.py`
