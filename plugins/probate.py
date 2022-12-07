@@ -55,7 +55,7 @@ def timestamp_to_human(
 def timestamp_to_human_eta(
     timestamp: float,
 ):
-    return f"<t:{int(timestamp)}:A>"
+    return f"<t:{int(timestamp)}:R>"
 
 
 def find_channel(guild: hikari.Guild, type: hikari.ChannelType, name: str):
