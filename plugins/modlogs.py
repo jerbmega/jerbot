@@ -101,6 +101,7 @@ async def on_message_delete(event: hikari.GuildMessageDeleteEvent) -> None:
     if (
         event.guild_id in plugin.d["config"]
         and "message_deletes" in plugin.d["config"][event.guild_id]
+        and "old_message" in event
         and "content" in event.old_message
     ):
         await plugin.bot.cache.get_guild_channel(
