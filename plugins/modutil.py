@@ -20,6 +20,30 @@ plugin = lightbulb.Plugin("Mod Util", include_datastore=True)
 @plugin.command
 @lightbulb.add_checks(lightbulb.has_guild_permissions(hikari.Permissions.BAN_MEMBERS))
 @lightbulb.option(
+    "delete_days",
+    "How many days worth of messages the user sent will be deleted",
+    int,
+    required=False,
+    min_value=0,
+    max_value=7,
+)
+@lightbulb.option(
+    "reason", "Reason the user is being unbanned", str, required=False, default=""
+)
+@lightbulb.option("user", "ID and discriminator of user to unban", hikari.User)
+@lightbulb.command("ban", "Ban a user", guilds=get_enabled_guilds())
+@lightbulb.implements(lightbulb.SlashCommand)
+async def ban(ctx: lightbulb.Context) -> None:
+    await ctx.get_guild().ban(
+        ctx.options.user,
+        reason=ctx.options.reason,
+    )
+    await ctx.respond("User has been banned.")
+
+
+@plugin.command
+@lightbulb.add_checks(lightbulb.has_guild_permissions(hikari.Permissions.BAN_MEMBERS))
+@lightbulb.option(
     "reason", "Reason the user is being unbanned", str, required=False, default=""
 )
 @lightbulb.option(
@@ -35,7 +59,7 @@ async def unban(ctx: lightbulb.Context) -> None:
         ),
         reason=ctx.options.reason,
     )
-    await ctx.respond("User has been unbanned.", flags=hikari.MessageFlag.EPHEMERAL)
+    await ctx.respond("User has been unbanned.")
 
 
 @unban.autocomplete("user")
@@ -76,7 +100,7 @@ async def on_member_banned(event: hikari.BanCreateEvent) -> None:
     if event.guild_id in plugin.d["config"]:
         await db.insert(
             "bancache",
-            f"guild_{event.guild}",
+            f"guild_{event.guild_id}",
             (ban.user.id, f"{ban.user.username}#{ban.user.discriminator}"),
         )
 
