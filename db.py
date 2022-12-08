@@ -47,6 +47,20 @@ async def drop_table(database: str, table: str):
                 return False
 
 
+async def create_index(
+    database: str, name: str, table: str, columns: list, unique: bool = False
+):
+    """
+    Creates an index for the specified table.
+    """
+    async with aiosqlite.connect(f"db/{database}.db") as conn:
+        async with conn.cursor() as cursor:
+            await cursor.execute(
+                f"CREATE {'UNIQUE' if unique else ''} INDEX IF NOT EXISTS {name} on {table}({','.join(column for column in columns)})"
+            )
+            await conn.commit()
+
+
 async def query_table(database: str, table: str):
     """
     Checks if
