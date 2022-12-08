@@ -57,6 +57,14 @@ async def load(ctx: lightbulb.Context) -> None:
     )
 
 
+@plugin.command
+@lightbulb.command("resync_commands", "Resyncs slash commands with Discord")
+@lightbulb.implements(lightbulb.SlashCommand)
+async def resync_commands(ctx: lightbulb.Context) -> None:
+    await ctx.bot.sync_application_commands()
+    await ctx.respond("Done.")
+
+
 def load(bot):
     bot.add_plugin(plugin)
 
