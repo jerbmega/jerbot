@@ -107,7 +107,7 @@ if __name__ == "__main__":
     bot.d["start_time"] = datetime.datetime.now()
     for folder in bot.d["plugin_folders"]:
         bot.load_extensions_from(folder)
-    miru.load(bot)
+    miru.install(bot)
     bot.run()
 
 
