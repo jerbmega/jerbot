@@ -4,6 +4,7 @@ import hikari
 import lightbulb
 import asyncio
 from datetime import datetime
+from sqlite3 import IntegrityError
 
 import main
 import db
@@ -33,15 +34,18 @@ plugin.add_checks(lightbulb.human_only, check_authorized)
 @lightbulb.command("watch", "Add a user to the watchlist", guilds=get_enabled_guilds())
 @lightbulb.implements(lightbulb.SlashCommand)
 async def watch(ctx: lightbulb.Context) -> None:
-    watched_ids = await db.queryall("watchlist", f"select id from guild_{ctx.guild_id}")
-    if watched_ids and ctx.options.user.id in watched_ids:
-        raise err.UserAlreadyWatched
-    await db.insert(
-        "watchlist",
-        f"guild_{ctx.guild_id}",
-        (ctx.options.user.id, ctx.options.user.username, ctx.options.reason),
+    await db.create_index(
+        "watchlist", "idx_id", f"guild_{ctx.guild_id}", ["id"], unique=True
     )
-    await ctx.respond(f"`{ctx.options.user.username}` added to the watchlist.")
+    try:
+        await db.insert(
+            "watchlist",
+            f"guild_{ctx.guild_id}",
+            (ctx.options.user.id, ctx.options.user.username, ctx.options.reason),
+        )
+        await ctx.respond(f"`{ctx.options.user.username}` added to the watchlist.")
+    except IntegrityError:
+        raise err.UserAlreadyWatched
 
 
 @plugin.command
