@@ -18,8 +18,6 @@ Jerbot's flexible configuration system allows for hot-toggling of features (or s
 ### Docker Compose (Highly Recommended)
 If you haven't used Docker or Docker Compose before, [you'll need to install it.](https://docs.docker.com/engine/install/) I highly recommend checking it out- it makes running this stuff much easier!
 
-(This currently only works on AMD64- I'm working on getting Github Actions to cross compile for ARM64 as well.)
-
 - Optionally, uncomment the commented out plugins line in `docker-compose.yml`. This means that if the only changes in a commit are to plugins instead of the main bot, the plugins can simply be reloaded in place instead of requiring a container restart.
 - Initialize the bot with `docker compose up`.
 
