@@ -24,12 +24,6 @@ jobs:
       # Set up QEMU
       - name: Initialize QEMU
         uses: docker/setup-qemu-action@v2
-        
-      - name: Set up GCC
-        uses: egor-tensin/setup-gcc@v1
-        with:
-          version: latest
-          platform: x64
 
       # Build image using Buildah action
       - name: Build Image
