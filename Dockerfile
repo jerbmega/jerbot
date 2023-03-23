@@ -14,4 +14,4 @@ COPY scheduler.py .
 
 COPY plugins plugins
 
-CMD ["python3", "main.py"]
+CMD ["python3", "-O", "main.py"]
