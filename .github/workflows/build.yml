@@ -25,10 +25,12 @@ jobs:
       - name: Initialize QEMU
         uses: docker/setup-qemu-action@v2
         
-      # Install build-essential
-      - name: Install build-essential
-        run: "sudo apt update && sudo apt install -y build-essential"
-
+      - name: Set up GCC
+        uses: egor-tensin/setup-gcc@v1
+        with:
+        version: latest
+        platform: x64
+        
       # Build image using Buildah action
       - name: Build Image
         id: build_image
