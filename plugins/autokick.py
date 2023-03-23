@@ -16,9 +16,7 @@ plugin = lightbulb.Plugin("Autokick", include_datastore=True)
 
 
 @plugin.command
-@lightbulb.add_checks(
-    lightbulb.has_channel_permissions(hikari.Permissions.KICK_MEMBERS)
-)
+@lightbulb.add_checks(lightbulb.has_guild_permissions(hikari.Permissions.KICK_MEMBERS))
 @lightbulb.command(
     "autokick",
     "Automatically kicks new accounts (< 7 days old). Please use with caution.",
