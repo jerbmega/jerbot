@@ -43,7 +43,7 @@ async def on_member_join(event: hikari.MemberCreateEvent) -> None:
             microsecond=0
         ) - event.user.created_at.replace(microsecond=0)
         if account_age.days <= 7:
-            await event.user.kick()
+            await event.member.kick()
 
 
 def load(bot):
