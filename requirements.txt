@@ -1,4 +1,4 @@
-hikari
+hikari[speedups]
 hikari-lightbulb
 hikari-miru
 pyyaml

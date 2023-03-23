@@ -5,6 +5,7 @@ FROM python:3.10
 WORKDIR /jerbot
 
 COPY requirements.txt requirements.txt
+RUN apt-get update && apt-get install build-essential -y
 RUN pip3 install -r requirements.txt
 
 COPY main.py .
@@ -14,4 +15,4 @@ COPY scheduler.py .
 
 COPY plugins plugins
 
-CMD ["python3", "main.py"]
+CMD ["python3", "-O", "main.py"]

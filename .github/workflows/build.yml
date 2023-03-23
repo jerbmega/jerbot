@@ -24,7 +24,7 @@ jobs:
       # Set up QEMU
       - name: Initialize QEMU
         uses: docker/setup-qemu-action@v2
-        
+
       # Build image using Buildah action
       - name: Build Image
         id: build_image
