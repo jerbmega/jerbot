@@ -25,6 +25,10 @@ jobs:
       - name: Initialize QEMU
         uses: docker/setup-qemu-action@v2
         
+      # Install build-essential
+      - Name: Install build-essential
+        run: "sudo apt update && sudo apt install -y build-essential"
+
       # Build image using Buildah action
       - name: Build Image
         id: build_image
