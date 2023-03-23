@@ -67,6 +67,12 @@ logs:
 modutil:
   true
 
+# With Autokick, accounts under this age will be kicked.
+# This is a toggled feature. "Enabled" turns it on by default, please use with caution.
+autokick:
+  enabled: false
+  account_age: 7
+
 # This allows the owner of the deployed Jerbot instance to ban users from your server, in the event of an identified ongoing botnet or raid.
 # This also lets the owner of the deployed Jerbot instance send announcements to a designated announcement channel.
 # You NEED to trust the bot owner for this- this can be used maliciously in the wrong hands.
