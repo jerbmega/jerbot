@@ -107,7 +107,7 @@ async def on_member_banned(event: hikari.BanCreateEvent) -> None:
 
 @plugin.command
 @lightbulb.add_checks(
-    lightbulb.has_channel_permissions(hikari.Permissions.MANAGE_MESSAGES)
+    lightbulb.has_guild_permissions(hikari.Permissions.MANAGE_MESSAGES)
 )
 @lightbulb.option(
     "time",
