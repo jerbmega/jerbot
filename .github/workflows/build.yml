@@ -1,5 +1,6 @@
 name: build-jerbot
 on:
+  workflow_dispatch:
   push:
     branches:
       - reheated
