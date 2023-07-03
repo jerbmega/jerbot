@@ -296,6 +296,7 @@ async def log_message(event: hikari.Event):
 )
 @lightbulb.implements(lightbulb.SlashCommand)
 async def probate(ctx: lightbulb.Context) -> None:
+    await ctx.respond("Working on it...")
     await probate_user(
         ctx.get_guild(), ctx.options.user, ctx.options.reason, ctx.options.time
     )
@@ -334,7 +335,7 @@ async def probate(ctx: lightbulb.Context) -> None:
         await ctx.bot.cache.get_guild_channel(
             plugin.d["config"][ctx.guild_id]["log_channel"]
         ).send(embed=embed)
-    await ctx.respond(
+    await ctx.edit_last_response(
         f"Done. Scheduled release for {timestamp_to_human(parse_time(ctx.options.time).timestamp())}"
     )
 
@@ -395,6 +396,8 @@ async def strike(ctx: lightbulb.Context) -> None:
         if role in plugin.d["config"][ctx.guild_id]["allowed_roles"]:
             raise err.UnstrikeableRole
 
+    await ctx.respond("Working on it...")
+
     if ctx.options.time:
         scheduled_time = parse_time(ctx.options.time)
         scheduled_timestamp_round = int(scheduled_time.timestamp())
@@ -448,7 +451,6 @@ async def strike(ctx: lightbulb.Context) -> None:
         )
 
     if "log_channel" in plugin.d["config"][ctx.guild_id]:
-
         embed = await log_embed(
             user=ctx.options.user,
             event=f"Strike issued (strike {strike_num}).",
@@ -489,7 +491,7 @@ async def strike(ctx: lightbulb.Context) -> None:
         await ctx.get_guild().kick(
             ctx.options.user, reason=f"Strike {strike_num} (automatic kick)."
         )
-    await ctx.respond(f"Done. This is strike {strike_num}.")
+    await ctx.edit_last_response(f"Done. This is strike {strike_num}.")
 
 
 @plugin.command
@@ -593,7 +595,6 @@ async def on_member_join(event: hikari.MemberCreateEvent) -> None:
         "probate",
         f"select user_id from probations_{event.guild_id} where user_id = {event.user.id}",
     ):
-
         old_data = await db.query(
             "probate",
             f"select time, reason from probations_{event.guild_id} where user_id = {event.user.id}",
