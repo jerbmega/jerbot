@@ -30,7 +30,9 @@ plugin = lightbulb.Plugin("Mod Util", include_datastore=True)
 @lightbulb.option(
     "reason", "Reason the user is being unbanned", str, required=False, default=""
 )
-@lightbulb.option("user", "ID and discriminator of user to unban", hikari.User)
+@lightbulb.option(
+    "user", "ID and discriminator (if applicable) of user to unban", hikari.User
+)
 @lightbulb.command("ban", "Ban a user", guilds=get_enabled_guilds())
 @lightbulb.implements(lightbulb.SlashCommand)
 async def ban(ctx: lightbulb.Context) -> None:
@@ -47,7 +49,10 @@ async def ban(ctx: lightbulb.Context) -> None:
     "reason", "Reason the user is being unbanned", str, required=False, default=""
 )
 @lightbulb.option(
-    "user", "ID and discriminator of user to unban", str, autocomplete=True
+    "user",
+    "ID and discriminator (if applicable) of user to unban",
+    str,
+    autocomplete=True,
 )
 @lightbulb.command("unban", "Unban a user", guilds=get_enabled_guilds())
 @lightbulb.implements(lightbulb.SlashCommand)
@@ -90,7 +95,7 @@ async def prepare_cache(bans, guild):
             f"guild_{guild}",
             (
                 ban.user.id,
-                f"{ban.user.username}#{ban.user.discriminator}",
+                ban.user.username,
             ),
         )
 
@@ -101,7 +106,7 @@ async def on_member_banned(event: hikari.BanCreateEvent) -> None:
         await db.insert(
             "bancache",
             f"guild_{event.guild_id}",
-            (ban.user.id, f"{ban.user.username}#{ban.user.discriminator}"),
+            (ban.user.id, ban.user.username),
         )
 
 

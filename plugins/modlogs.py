@@ -19,7 +19,7 @@ async def log_embed(
     fields: list = [],
 ):
     embed = hikari.embeds.Embed(
-        title=f"{user.username}#{user.discriminator}",
+        title=user.username,
         description=desc,
         color=color,
         timestamp=datetime.now().astimezone(),
@@ -73,7 +73,6 @@ async def on_member_leave(event: hikari.MemberDeleteEvent) -> None:
         event.guild_id in plugin.d["config"]
         and "member_leaves" in plugin.d["config"][event.guild_id]
     ):
-
         await plugin.bot.cache.get_guild_channel(
             plugin.d["config"][event.guild_id]["member_leaves"]["channel"]
         ).send(

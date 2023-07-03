@@ -73,7 +73,7 @@ async def log_embed(
     fields: list = [],
 ):
     embed = hikari.embeds.Embed(
-        title=f"{user.username}#{user.discriminator}",
+        title=user.username,
         description=desc,
         color=color,
         timestamp=datetime.now().astimezone(),
@@ -324,7 +324,7 @@ async def probate(ctx: lightbulb.Context) -> None:
                 },
                 {
                     "name": "Issuer",
-                    "value": f"{ctx.author.username}#{ctx.author.discriminator}",
+                    "value": ctx.author.username,
                 },
             ],
         )
@@ -459,7 +459,7 @@ async def strike(ctx: lightbulb.Context) -> None:
                 {"name": "User ID", "value": ctx.options.user.id},
                 {
                     "name": "Issuer",
-                    "value": f"{ctx.author.username}#{ctx.author.discriminator}",
+                    "value": ctx.author.username,
                 },
                 {"name": "Reason", "value": ctx.options.reason},
             ],
@@ -514,7 +514,7 @@ async def liststrikes(ctx: lightbulb.Context) -> None:
     if not strikes:
         raise err.UserHasNoStrikes
     embed = hikari.embeds.Embed(
-        title=f"{ctx.options.user.username}#{ctx.options.user.discriminator}",
+        title=ctx.options.user.username,
         color=plugin.d["config"][ctx.guild_id]["log_color"],
     )
     for i, strike in enumerate(strikes, 1):
