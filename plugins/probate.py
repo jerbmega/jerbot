@@ -481,13 +481,36 @@ async def strike(ctx: lightbulb.Context) -> None:
         plugin.d["config"][ctx.guild_id]["strikes_ban_on"]
         and strike_num >= plugin.d["config"][ctx.guild_id]["strikes_ban_on"]
     ):
+        try:
+            response = (
+                plugin.d["config"][ctx.guild_id][strikes_ban_message]
+                .replace("%num_strikes%", str(strike_num))
+              )
+
+            await ctx.options.user.send(response)
+
+        except (hikari.errors.ForbiddenError, hikari.errors.BadRequestError):
+            pass
+
         await ctx.get_guild().ban(
             ctx.options.user, reason=f"Strike {strike_num} (automatic ban)."
         )
+
     elif (
         plugin.d["config"][ctx.guild_id]["strikes_kick_on"]
         and strike_num >= plugin.d["config"][ctx.guild_id]["strikes_kick_on"]
     ):
+        try:
+            response = (
+                plugin.d["config"][ctx.guild_id][strikes_kick_message]
+                .replace("%num_strikes%", str(strike_num))
+              )
+
+            await ctx.options.user.send(response)
+
+        except (hikari.errors.ForbiddenError, hikari.errors.BadRequestError):
+            pass
+
         await ctx.get_guild().kick(
             ctx.options.user, reason=f"Strike {strike_num} (automatic kick)."
         )
