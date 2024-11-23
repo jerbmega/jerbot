@@ -103,10 +103,16 @@ async def prepare_cache(bans, guild):
 @plugin.listener(hikari.BanCreateEvent)
 async def on_member_banned(event: hikari.BanCreateEvent) -> None:
     if event.guild_id in plugin.d["config"]:
+        await db.create_table(
+            "bancache",
+            f"guild_{event.guild_id}",
+            ("id", "searchable"),
+         )
+
         await db.insert(
             "bancache",
             f"guild_{event.guild_id}",
-            (ban.user.id, ban.user.username),
+            (event.user.id, event.user.username),
         )
 
 
