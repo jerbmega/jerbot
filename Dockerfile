@@ -12,6 +12,8 @@ COPY requirements.txt main.py err.py db.py scheduler.py .
 COPY plugins plugins
 
 # GCC is needed for the aarch64 images to compile Python packages.
-RUN  apk add gcc && pip install -r requirements.txt --user && apk del gcc
+RUN apk add gcc python-${version}-dev build-base && \
+    pip install -r requirements.txt --user && \
+    apk del gcc python-${version}-dev build-base
 
 CMD ["python", "-O", "main.py"]
