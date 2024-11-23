@@ -57,7 +57,7 @@ async def platgod_embed(
 
 class PlatgodView(miru.View):
     @miru.button(label="Previous", style=hikari.ButtonStyle.PRIMARY)
-    async def prev_button(self, button: miru.Button, ctx: miru.Context) -> None:
+    async def prev_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
         if self.pagenum > 1:
             self.pagenum = self.pagenum - 1
             await ctx.edit_response(
@@ -70,7 +70,7 @@ class PlatgodView(miru.View):
             )
 
     @miru.button(label="Next", style=hikari.ButtonStyle.PRIMARY)
-    async def next_button(self, button: miru.Button, ctx: miru.Context) -> None:
+    async def next_button(self, button: miru.Button, ctx: miru.ViewContext) -> None:
         if self.pagenum < 10:
             self.pagenum = self.pagenum + 1
             await ctx.edit_response(
@@ -157,9 +157,9 @@ async def platgod(ctx: lightbulb.Context) -> None:
         view.page,
         view.pagenum,
     )
-    message = await ctx.respond(components=view.build(), embed=embed)
+    message = await ctx.respond(components=view, embed=embed)
 
-    await view.start(await message)
+    ctx.bot.d.miru.start_view(view)
     await view.wait()
 
     embed = (await ctx.previous_response).embeds[0]
