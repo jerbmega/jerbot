@@ -1,18 +1,17 @@
-# syntax=docker/dockerfile:1
+FROM cgr.dev/chainguard/wolfi-base
 
-FROM python:3.10
+ARG version=3.12
 
 WORKDIR /jerbot
 
-COPY requirements.txt requirements.txt
-RUN apt-get update && apt-get install build-essential -y
-RUN pip3 install -r requirements.txt
 
-COPY main.py .
-COPY err.py .
-copy db.py .
-COPY scheduler.py .
+RUN apk add python-${version} py${version}-pip && \
+    chown -R nonroot:nonroot /jerbot/
 
+COPY requirements.txt main.py err.py db.py scheduler.py .
 COPY plugins plugins
 
-CMD ["python3", "-O", "main.py"]
+# GCC is needed for the aarch64 images to compile Python packages.
+RUN  apk add gcc && pip install -r requirements.txt --user && apk del gcc
+
+CMD ["python", "-O", "main.py"]
