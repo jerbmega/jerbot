@@ -51,7 +51,7 @@ async def global_ban(ctx: lightbulb.Context) -> None:
         raise err.InvalidGlobalBanURL
 
     await ctx.respond(
-        f"Processing {len(users)} users across {len(elegible_guilds)} servers. Buckle up... this is gonna take a while.",
+        f"Processing {len(users)} users across {len(eligible_guilds)} servers. Buckle up... this is gonna take a while.",
         flags=hikari.MessageFlag.EPHEMERAL,
     )
 
@@ -62,6 +62,8 @@ async def global_ban(ctx: lightbulb.Context) -> None:
                 await guild.ban(user)
                 await asyncio.sleep(1)
             except hikari.errors.NotFoundError:
+                pass
+            except hikari.errors.ForbiddenError:
                 pass
     await ctx.edit_last_response("Done.")
 
