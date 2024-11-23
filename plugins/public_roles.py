@@ -20,8 +20,8 @@ class AddRoleButton(miru.Button):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
-    async def callback(self, ctx: miru.Context) -> None:
-        await ctx.app.rest.add_role_to_member(ctx.guild_id, ctx.user, self.role_id)
+    async def callback(self, ctx: miru.ViewContext) -> None:
+        await ctx.client.rest.add_role_to_member(ctx.guild_id, ctx.user, self.role_id)
         self.view.success = True
         self.view.stop()
 
@@ -30,8 +30,8 @@ class DelRoleButton(miru.Button):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
-    async def callback(self, ctx: miru.Context) -> None:
-        await ctx.app.rest.remove_role_from_member(ctx.guild_id, ctx.user, self.role_id)
+    async def callback(self, ctx: miru.ViewContext) -> None:
+        await ctx.client.rest.remove_role_from_member(ctx.guild_id, ctx.user, self.role_id)
         self.view.success = True
         self.view.stop()
 
@@ -51,11 +51,11 @@ async def join(ctx: lightbulb.Context) -> None:
     message = await (
         await ctx.respond(
             "Choose a role to join.",
-            components=view.build(),
+            components=view,
             flags=hikari.MessageFlag.EPHEMERAL,
         )
     )
-    view.start(message)
+    ctx.bot.d.miru.start_view(view)
     await view.wait()
 
     if hasattr(view, "success"):
@@ -88,10 +88,10 @@ async def leave(ctx: lightbulb.Context) -> None:
 
     message = await ctx.respond(
         "Choose a role to leave.",
-        components=view.build(),
+        components=view,
         flags=hikari.MessageFlag.EPHEMERAL,
     )
-    view.start(await message)
+    ctx.bot.d.miru.start_view(view)
     await view.wait()
 
     if hasattr(view, "success"):

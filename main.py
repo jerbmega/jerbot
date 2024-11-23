@@ -103,11 +103,11 @@ if __name__ == "__main__":
     async def start_scheduler(event: hikari.StartedEvent):
         scheduler.start()
 
-    bot.d = load_config()
-    bot.d["start_time"] = datetime.datetime.now()
-    for folder in bot.d["plugin_folders"]:
+    bot.d.config = load_config()
+    bot.d.config["start_time"] = datetime.datetime.now()
+    for folder in bot.d.config["plugin_folders"]:
         bot.load_extensions_from(folder)
-    miru.install(bot)
+    bot.d.miru = miru.Client(bot)
     bot.run()
 
 

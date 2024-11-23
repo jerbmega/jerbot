@@ -165,7 +165,7 @@ def load(bot):
         loop = None
 
     for guild in plugin.d["config"]:
-        if (datetime.datetime.now() - bot.d["start_time"]).seconds < 10:
+        if (datetime.datetime.now() - bot.d.config["start_time"]).seconds < 10:
             if loop and loop.is_running():
                 loop.create_task(
                     db.del_table("bancache")
