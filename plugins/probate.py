@@ -483,7 +483,7 @@ async def strike(ctx: lightbulb.Context) -> None:
     ):
         try:
             response = (
-                plugin.d["config"][ctx.guild_id][strikes_ban_message]
+                plugin.d["config"][ctx.guild_id]["strikes_ban_message"]
                 .replace("%num_strikes%", str(strike_num))
               )
 
@@ -502,7 +502,7 @@ async def strike(ctx: lightbulb.Context) -> None:
     ):
         try:
             response = (
-                plugin.d["config"][ctx.guild_id][strikes_kick_message]
+                plugin.d["config"][ctx.guild_id]["strikes_kick_message"]
                 .replace("%num_strikes%", str(strike_num))
               )
 
@@ -565,13 +565,13 @@ async def liststrikes(ctx: lightbulb.Context) -> None:
 async def delstrike(ctx: lightbulb.Context) -> None:
     strike_time = await db.query(
         "probate",
-        f'select timestamp from strikes_{ctx.guild_id} where id == {ctx.options.user.id} and reason == "{ctx.options.reason}" limit 1',
+        f'select timestamp from strikes_{ctx.guild_id} where id = {ctx.options.user.id} and reason = "{ctx.options.reason}" limit 1',
     )
 
     await db.remove(
         "probate",
         f"strikes_{ctx.guild_id}",
-        f'id == {ctx.options.user.id} and reason == "{ctx.options.reason}" limit 1',
+        f'rowid in (select rowid from strikes_{ctx.guild_id} where id = {ctx.options.user.id} and reason = "{ctx.options.reason}" limit 1)',
     )
     if strike_time:
         scheduler.remove_job(
