@@ -28,3 +28,11 @@ class UserHasNoStrikes(Exception):
 
 class UserAlreadyWatched(Exception):
     pass
+
+
+class InsufficientPermissions(Exception):
+    pass
+
+
+class InvalidCog(Exception):
+    pass

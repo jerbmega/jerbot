@@ -6,7 +6,7 @@
 ## About
 Jerbot is a generic, extensible, modular multi-purpose Fluxer bot.
 
-~~Jerbot's flexible configuration system allows for hot-toggling of features (or subfeatures, barring some edge cases!) for every server it's deployed on. There are *no* global commands- everything is done on a server by server basis.~~ (not yet, but soon on the Fluxer build 😅)
+Jerbot's flexible configuration system allows for hot-toggling of features (or subfeatures, barring some edge cases!) for every server it's deployed on. There are *no* global commands- everything is done on a server by server basis.
 
 
 ## Running

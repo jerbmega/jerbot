@@ -1,4 +1,4 @@
-fluxer.py==0.3.0
+fluxer.py==0.3.1
 pyyaml
 aiosqlite
 sqlalchemy

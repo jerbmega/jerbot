@@ -2,6 +2,8 @@ import fluxer
 import yaml
 import os
 
+import err
+
 
 def load_config():
     with open("config.yaml") as cfg:
@@ -11,6 +13,97 @@ def load_config():
 
 config = load_config()
 bot = fluxer.Bot(command_prefix=config["prefix"], intents=fluxer.Intents.default())
+
+
+# Annoyingly, these commands are bugged because of bugs in fluxer.py... how fun. They'll work when it's fixed.
+@bot.command()
+async def load(ctx, cog: str = None):
+    try:
+        if not ctx.author.id == config["owner"]:
+            raise err.InsufficientPermissions
+
+        cog_list = [
+            f"{folder}.{cog.replace('.py', '')}"
+            for folder in config["plugin_folders"]
+            for cog in os.listdir(folder)
+            if "pycache" not in cog
+        ]
+        if not cog:
+            await ctx.reply(f"Available cogs: `{', '.join(cog_list)}`")
+            return
+
+        if cog not in cog_list:
+            raise err.InvalidCog
+
+        await bot.load_extension(cog)
+        await ctx.reply(f"`{cog}` loaded.")
+
+    except err.InsufficientPermissions:
+        await ctx.reply("You have insufficient permissions to run this command.")
+    except err.InvalidCog:
+        await ctx.reply(
+            f"This is not a valid cog.\nAvailable cogs: `{', '.join(cog_list)}`"
+        )
+
+
+@bot.command()
+async def unload(ctx, cog: str = None):
+    try:
+        if not ctx.author.id == config["owner"]:
+            raise err.InsufficientPermissions
+
+        cog_list = [
+            f"{folder}.{cog.replace('.py', '')}"
+            for folder in config["plugin_folders"]
+            for cog in os.listdir(folder)
+            if "pycache" not in cog
+        ]
+        if not cog:
+            await ctx.reply(f"Available cogs: `{', '.join(cog_list)}`")
+            return
+
+        if cog not in cog_list:
+            raise err.InvalidCog
+
+        await bot.unload_extension(cog)
+        await ctx.reply(f"`{cog}` unloaded.")
+
+    except err.InsufficientPermissions:
+        await ctx.reply("You have insufficient permissions to run this command.")
+    except err.InvalidCog:
+        await ctx.reply(
+            f"This is not a valid cog.\nAvailable cogs: `{', '.join(cog_list)}`"
+        )
+
+
+@bot.command()
+async def reload(ctx, cog: str = None):
+    try:
+        if not ctx.author.id == config["owner"]:
+            raise err.InsufficientPermissions
+
+        cog_list = [
+            f"{folder}.{cog.replace('.py', '')}"
+            for folder in config["plugin_folders"]
+            for cog in os.listdir(folder)
+            if "pycache" not in cog
+        ]
+        if not cog:
+            await ctx.reply(f"Available cogs: `{', '.join(cog_list)}`")
+            return
+
+        if cog not in cog_list:
+            raise err.InvalidCog
+
+        await bot.reload_extension(cog)
+        await ctx.reply(f"`{cog}` reloaded.")
+
+    except err.InsufficientPermissions:
+        await ctx.reply("You have insufficient permissions to run this command.")
+    except err.InvalidCog:
+        await ctx.reply(
+            f"This is not a valid cog.\nAvailable cogs: `{', '.join(cog_list)}`"
+        )
 
 
 @bot.event

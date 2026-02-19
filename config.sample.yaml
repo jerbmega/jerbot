@@ -10,3 +10,7 @@ prefix: YOUR_PREFIX_HERE
 plugin_folders:
   - plugins
   - example_submodule
+
+# This will be dynamically generated once Fluxer.py supports getting the owner of the bot easily.
+# For now, hardcode an ID of a user that can run administrative commands (like loading cogs).
+owner: YOUR_SNOWFLAKE_HERE
