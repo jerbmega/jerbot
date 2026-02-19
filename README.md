@@ -1,16 +1,19 @@
-# Jerbot version 4 ("Reheated")
+# Jerbot
+
+> [!CAUTION]
+> It's early days for the Fluxer version of Jerbot. Features will be missing for now, and the instructions below won't work!
 
 ## About
-Jerbot is a generic, extensible, modular multi-purpose Discord bot. It primarily caters to the needs of the [Binding of Isaac Discord server](https://discord.gg/isaac), but is used sparingly in Nuclear Throne, Linux Gaming and a few other servers. 
+Jerbot is a generic, extensible, modular multi-purpose Fluxer bot.
 
-Jerbot's flexible configuration system allows for hot-toggling of features (or subfeatures, barring some edge cases!) for every server it's deployed on. There are *no* global commands- everything is done on a server by server basis.
+~~Jerbot's flexible configuration system allows for hot-toggling of features (or subfeatures, barring some edge cases!) for every server it's deployed on. There are *no* global commands- everything is done on a server by server basis.~~ (not yet, but soon on the Fluxer build 😅)
 
 
 ## Running
 ### [FOLLOW FIRST] Initial setup
 `git clone` the repository, then
 - Copy `config.sample.yaml` to `config.yaml`.
-- Tweak the `config.yaml` to your liking. Make sure your bot's token is correct, and that, if you plan to use any submodules like [Book of Secrets](https://github.com/boi-community/book-of-secrets), make sure the folder is added to `plugin_folders`.
+- Tweak the `config.yaml` to your liking. Make sure your bot's token is correct, and that, if you plan to use any third party submodules, make sure the folder is added to `plugin_folders`.
 - In `server_configs`, copy `server_config.sample.yaml` to `(guild id).yaml`, where `(guild id)` is the ID of a guild you are going to deploy the bot in. Every guild the bot is in will need its own config.
 - Tweak every planned server config to your liking.
 

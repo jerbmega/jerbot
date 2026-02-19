@@ -3,120 +3,17 @@
 
 # Any feature (or subfeature) not wanted in the server being configured can simply be omitted from the configuration file.
 
-# This configures the automessage plugin, which sends an automatic message at the specified interval.
-automessage:
-  - crontab:  "* * * * *" # This example crontab runs the automessage task every minute. Generate your own at https://crontab.guru/
-    channel:  YOUR_CHANNEL_ID_HERE
-    message:  "YOUR_MESSAGE_CONTENT_HERE"
-
-# This configures the channels and embed colors for moderation log functionality.
-# As stated above, any subfeature not wanted here can simply be removed.
-modlogs:
-  message_edits:
-      channel:  YOUR_CHANNEL_ID_HERE
-      color:    0xffffff # Any hex color code is accepted.
-  message_deletes:
-      channel:  YOUR_CHANNEL_ID_HERE
-      color:    0xffffff
-  member_joins:
-      channel:  YOUR_CHANNEL_ID_HERE
-      color:    0xffffff
-      new_account_color:    0xffffff # This color is used when an account is under seven days old.
-  member_leaves:
-      channel:  YOUR_CHANNEL_ID_HERE
-      color:    0xffffff
-  member_bans:
-      channel:  YOUR_CHANNEL_ID_HERE
-      color:    0xffffff
-
-# This configures the blacklist functionality. You can put as many blacklisted words here as necessary for your setup.
-blacklist:
+# This configures the blocklist functionality. You can put as many blocklisted words here as necessary for your setup.
+blocklist:
   exempt_roles:
   - YOUR_ROLE_ID_HERE
   triggers:
-  - "YOUR_BLACKLISTED_WORD_HERE"
-  - "YOUR_SECOND_BLACKLISTED_WORD_HERE"
-  # These are searched as-is.
-  special_triggers:
-  - "YOUR_SPECIAL_BLACKLISTED_WORD_HERE"
+  - "YOUR_BLOCKLISTED_WORD_HERE"
+  - "YOUR_SECOND_BLOCKLISTED_WORD_HERE"
+  # These are regex, in cases where a simple word won't do (or it isn't in the dictionary!).
+  # Don't worry about whitespace or capitalization, that's automatically removed.
+  regex_triggers:
+  - "YOUR_SPECIAL_BLOCKLISTED_WORD_HERE"
   dm_color:     0xffffff
   log_color:    0xffffff
   channel:  YOUR_CHANNEL_ID_HERE
-
-# This configures the watchlist functionality.
-watchlist:
-  # Put the ID of roles that should be authorized to use this command.
-  roles:
-  - YOUR_ROLE_ID_HERE
-  log_color: 0xffffff
-  channel: YOUR_CHANNEL_ID_HERE
-
-# This configures public roles. 
-# Put the ID of any roles you want to be made available here.
-# These MUST BE UNDER the bot on the role heirarchy or this will not work.
-public_roles:
-  - YOUR_ROLE_ID_HERE
-
-# This allows the owner of the deployed Jerbot instance to log all messages on the server for moderation purpose.
-# You NEED to trust the bot owner for this- this can be used maliciously in the wrong hands.
-# If your Jerbot instance is verified, this WILL NOT WORK, as verified bots are barred from the message intent.
-logs:
-  true # This can be anything, really.
-
-# This enables moderation utilities (unban and purge).
-modutil:
-  true
-
-# With Autokick, accounts under this age will be kicked.
-# This is a toggled feature. "Enabled" turns it on by default, please use with caution.
-autokick:
-  enabled: false
-  account_age: 7
-
-# This allows the owner of the deployed Jerbot instance to ban users from your server, in the event of an identified ongoing botnet or raid.
-# This also lets the owner of the deployed Jerbot instance send announcements to a designated announcement channel.
-# You NEED to trust the bot owner for this- this can be used maliciously in the wrong hands.
-aegis:
-  global_ban: true # As usual, just omit this if not desired.
-  announcements:
-    channel: YOUR_CHANNEL_ID_HERE 
-
-# This configures probations and strikes.
-# Unlike most of the other modules, all of these are required except for log_channel, strikes_{kick,ban}_on, and strikes_{kick,ban}_message.
-# If strikes_kick_on/strikes_ban_on are set, then strikes_kick_message and strikes_ban_message must be configured too.
-probate:
-  # Put the ID of any roles you want to be able to manage probations/strikes and see probation channels.
-  allowed_roles:
-  - YOUR_ROLE_ID_HERE
-  # Put the ID of the role to give to users in probation.
-  probation_role:        YOUR_ROLE_ID_HERE
-  # This is the ID of a channel that will have logs of the probation channel uploaded to it.
-  log_channel:           YOUR_CHANNEL_ID_HERE
-  # This is the colors that will be used for any probation related embeds.
-  log_color:             0xffffff
-  dm_color:              0xffffff
-  # This is the contents of a message that will be posted in a newly created probation channel.
-  # You can add %mention% into the string and it will be replaced with a mention of the user.
-  # You can add %time% into the string and it will be replaced with the time the user will be let out of probation.
-  # This will use Discord's internal timestamp feature, so the time will be accurate to the user's time zone.
-  # Ex: "You'll be here until %time%" -> "You'll be here until [2022/11/22 04:23:56]"
-  info_message:         "YOUR_MESSAGE_HERE"
-  # This is the contents of a DM that will be sent to a user when probated.
-  # The same %time% replacement applies.
-  probation_message:    "YOUR_MESSAGE_HERE"
-  # This will be DM'd to the user when they are removed from probation.
-  unprobation_message:  "YOUR_MESSAGE_HERE"
-  # This is the contents of a DM that will be sent to a user when striked.
-  # The same %time% replacement applies, but you can also use %num_strikes% to show the number of strikes.
-  # Ex: "You have %num_strikes% strikes" -> "You have 2 strikes"
-  strike_message:       "YOUR_MESSAGE_HERE"
-    # Same as above, but is sent for strikes that expire.
-  # %time% and %num_strikes% still work, but you can also use %expiry_time% to show when the strike will expire.
-  temp_strike_message:  "YOUR_MESSAGE_HERE"
-  # Message to send when a user is kicked/banned by strikes.
-  # %num_strikes% is accepted here.
-  strikes_kick_message: "YOUR_MESSAGE_HERE"
-  strikes_ban_message:  "YOUR_MESSAGE_HERE"
-  # Amount of strikes needed to kick or ban a user.
-  strikes_kick_on:  3
-  strikes_ban_on:   5

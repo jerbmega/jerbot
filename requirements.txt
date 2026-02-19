@@ -1,6 +1,4 @@
-hikari[speedups]
-hikari-lightbulb
-hikari-miru
+fluxer.py==0.3.0
 pyyaml
 aiosqlite
 sqlalchemy

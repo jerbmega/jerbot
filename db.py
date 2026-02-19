@@ -11,10 +11,6 @@ async def create_table(database: str, table: str, keys: tuple):
     """
     async with aiosqlite.connect(f"db/{database}.db") as conn:
         async with conn.cursor() as cursor:
-            # Quick crash course:
-            # - We're using SQLite 3 via an async wrapper, aiosqlite
-            # - Parenthesis are needed to properly use these values because of the quirks associated with being async
-            # - [0] is needed to get the actual result in this case
             await cursor.execute(f"CREATE TABLE IF NOT EXISTS {table} {keys}")
             await conn.commit()
 

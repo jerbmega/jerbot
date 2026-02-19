@@ -1,6 +1,10 @@
 # Replace YOUR_TOKEN_HERE with the token of your Discord bot.
 token: YOUR_TOKEN_HERE
 
+# Replace YOUR_PREFIX_HERE with your desired prefix for the bot's commands.
+# Once Fluxer supports slash commands, this will be deprecated. Beware!
+prefix: YOUR_PREFIX_HERE
+
 # Jerbot can load plugins from multiple different folders.
 # By default, this is just the plugins folder, but more can be added as needed.
 plugin_folders:
