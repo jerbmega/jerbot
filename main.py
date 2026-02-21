@@ -1,6 +1,7 @@
 import fluxer
 import yaml
 import os
+import traceback
 
 import err
 
@@ -116,7 +117,13 @@ async def on_ready():
 
 
 if __name__ == "__main__":
-    bot.run(config["token"])
+    while True:
+        try:
+            bot.run(config["token"])
+        except Exception as e:
+            print("".join(traceback.format_exception(type(e), e, e.__traceback__)))
+        except KeyboardInterrupt:
+            break
 
 
 def load_plugin_config(plugin: str):
