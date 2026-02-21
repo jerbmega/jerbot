@@ -1,5 +1,7 @@
 # Replace YOUR_TOKEN_HERE with the token of your Discord bot.
-token: YOUR_TOKEN_HERE
+# You can add other tokens under different names, and use them with the --token argument.
+tokens: 
+  default: YOUR_TOKEN_HERE
 
 # Replace YOUR_PREFIX_HERE with your desired prefix for the bot's commands.
 # Once Fluxer supports slash commands, this will be deprecated. Beware!

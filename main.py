@@ -2,6 +2,7 @@ import fluxer
 import yaml
 import os
 import traceback
+import argparse
 
 import err
 
@@ -117,9 +118,21 @@ async def on_ready():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Jerbot - A modular bot for Fluxer",
+    )
+    parser.add_argument(
+        "-t",
+        "--token",
+        default="default",
+        help="Name of a token to use for this instance of the bot. Define this in config.yaml",
+    )
+
+    args = parser.parse_args()
+
     while True:
         try:
-            bot.run(config["token"])
+            bot.run(config["tokens"][args.token])
         except Exception as e:
             print("".join(traceback.format_exception(type(e), e, e.__traceback__)))
         except KeyboardInterrupt:
