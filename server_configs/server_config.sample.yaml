@@ -17,3 +17,10 @@ blocklist:
   dm_color:     0xffffff
   log_color:    0xffffff
   channel:  YOUR_CHANNEL_ID_HERE
+
+# This configures public roles. 
+# Put the ID of any roles you want to be made available here.
+# These MUST BE UNDER the bot on the role heirarchy or this will not work.
+# Until Fluxer has an easy way to copy role IDs, you can find them with the fetch_roles command.
+public_roles:
+  - YOUR_ROLE_ID_HERE

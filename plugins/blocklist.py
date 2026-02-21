@@ -127,3 +127,7 @@ async def setup(bot):
     global config
     await bot.add_cog(Blocklist(bot))
     config = main.load_plugin_config("blocklist")
+
+
+async def teardown(bot):
+    await bot.remove_cog("Blocklist")

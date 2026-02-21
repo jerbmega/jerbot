@@ -15,7 +15,6 @@ config = load_config()
 bot = fluxer.Bot(command_prefix=config["prefix"], intents=fluxer.Intents.default())
 
 
-# Annoyingly, these commands are bugged because of bugs in fluxer.py... how fun. They'll work when it's fixed.
 @bot.command()
 async def load(ctx, cog: str = None):
     try:
