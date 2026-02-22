@@ -1,7 +1,6 @@
 import fluxer
 import yaml
 import os
-import traceback
 import argparse
 
 import err
@@ -130,13 +129,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    while True:
-        try:
-            bot.run(config["tokens"][args.token])
-        except Exception as e:
-            print("".join(traceback.format_exception(type(e), e, e.__traceback__)))
-        except KeyboardInterrupt:
-            break
+    bot.run(config["token"])
 
 
 def load_plugin_config(plugin: str):
